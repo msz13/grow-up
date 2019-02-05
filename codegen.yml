@@ -1,0 +1,6 @@
+overwrite: true
+generates:
+  ./src/types.ts:
+    schema: ./src/competences/competences.graphql
+    plugins:
+     - typescript-common

@@ -1,0 +1,93 @@
+scalar Date
+
+type Query {
+    competenceGoals(status: GoalStatus, competence: String): [CompetenceGoal]
+}
+
+type Mutation {
+    createCompGoal(competenceGoalInput: CompetenceGoalInput): CompetenceGoal
+   # goalStatusToHold(goal_Id: ID): Boolean
+   # goalStatusToDone(goal_Id: ID): Boolean
+   # goalStatusToActive(goal_Id: ID): Boolean
+   # incPerf(compGoal_Id: ID, fDayOfWeek: GraphQLDate, dayOfWeek: Int): Int
+   # decPerf(compGoal_Id: ID, fDayOfWeek: GraphQLDate, dayOfWeek: Int): Boolean
+    deleteCompGoal(goal_Id: ID): Boolean
+    updateComGoal(goal_Id: ID, updateCompetenceGoalInput: UpdateCompetenceGoalInput): CompetenceGoal
+}
+  
+type CompetenceGoal {
+  id: String
+  name: String! 
+  competence: String
+  target: Int #daily target of goal
+  status: GoalStatus
+  performance: ActiveGoalPerf  
+  perfHistory: [GoalPerfHistory]
+ }
+
+ enum GoalStatus{
+    ACTIVE
+    DONE
+    HOLD
+ }
+
+
+
+ type GoalDayPerf {
+     date: Date
+     perfCount: Int
+     targetIsDone: Boolean
+ }
+
+ interface GoalPerf {
+     # date of start active status
+     startActive: Date
+     #number of days of peforming goal
+     dayCount: Int
+     # score of perf
+     overallPerf: Int
+     weekCount: Int
+     goalEffectivenes: Int
+ }
+
+ type ActiveGoalPerf implements GoalPerf {
+     # date of start active status
+     startActive: Date
+     #number of days of peforming goal
+     dayCount: Int
+     # score of perf
+     overallPerf: Int #czy potrzebne?
+     weekCount: Int
+     goalEffectivenes: Int
+     goalDayPerf(from: Date, to: Date): [GoalDayPerf!]
+ }
+
+ type GoalPerfHistory implements GoalPerf {
+     # date of start active status
+     startActive: Date
+     #date od end active status
+     endActive: Date
+     #number of days of peforming goal
+     dayCount: Int
+     # score of perf
+     overallPerf: Int #czy wywalić?
+     weekCount: Int
+     goalEffectivenes: Int
+ }
+
+
+ input CompetenceGoalInput {
+     name: String!
+     competence: String!
+     target: Int!
+     }
+
+
+input UpdateCompetenceGoalInput {
+     name: String
+     competence: String
+     target: Int
+     }
+
+
+

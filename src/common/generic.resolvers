@@ -1,0 +1,16 @@
+import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
+
+
+
+@Resolver('Cat')
+export class ..Resolvers implements Partial <IQuery>, Partial <IMutation>{
+  constructor(private readonly ..Service: ..Service) {}
+
+  @Query()
+  @UseGuards(CatsGuard)
+  async getCats() {
+    return await this.catsService.findAll();
+  }
+
+  
+}

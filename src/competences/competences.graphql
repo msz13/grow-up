@@ -1,0 +1,8 @@
+type Query  {
+    competences: [Competences]
+}
+
+
+ type Competences {
+     name: String
+ }
