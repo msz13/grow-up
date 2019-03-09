@@ -3,7 +3,7 @@ import {ObjectId} from 'mongodb';
 import { Kind } from "graphql";
 
 
-@Scalar("ObjectId")
+@Scalar("ObjectID")
 export class ObjectIdScalar {
     parseValue(value: string) {
         return new ObjectId(value); // value from the client input variables

@@ -1,30 +1,36 @@
-import * as mongoose from 'mongoose';
-import {CompetenceGoal} from './competence-goal.model'
+import {CompetenceGoal} from './competence-goal.entity'
+import {CompetenceGoalRepository} from '../repositories/competence-goal.repository'
 import { GoalStatus } from '../../common/graphql.schema';
 import parse = require('date-fns/parse');
 import * as fs from 'fs';
 import * as util from 'util';
+import {createConnection, Connection} from 'typeorm'
+
 
 
 describe('CompetenceGoal Model Test', () => {
 
-    beforeAll(()=> {
-        mongoose.connect('mongodb://test_admin:admin1@ds046037.mlab.com:46037/type_test');
-        
+    let connection: Connection;
+    //let compGoalRepository
+    beforeAll(async ()=> {
+       
+       connection = await createConnection();    
+
+             
         });
 
-    afterAll(()=> {
-        mongoose.connection.close();
+    afterAll(async ()=> {
+
+        
+        
     });
 
-    beforeEach(()=> {
-       
-    });
+      
     
-    
-
         test("should save Competence Goal", async ()=>{
-          const CompGoalModel = new CompetenceGoal().getModelForClass(CompetenceGoal);
+           const  connection = await createConnection();    
+            const  compGoalRepository = await connection.getCustomRepository(CompetenceGoalRepository);
+          
           const compGoal = {
               name: 'mówić dzień dobry brudnej babie',
               competence: "uprzejmość",
@@ -39,8 +45,12 @@ describe('CompetenceGoal Model Test', () => {
             target: 1
 
           }
-           const competenceGoal = new CompGoalModel(compGoal);
-           const foundcompGoal =  await competenceGoal.save();
+           const competenceGoal = new CompetenceGoal();
+           competenceGoal.name= compGoal.name;
+           competenceGoal.competence=compGoal.competence;
+           competenceGoal.status=compGoal.status;
+           competenceGoal.target=compGoal.target;
+           const foundcompGoal =  await compGoalRepository.save(competenceGoal);
           
            expect(foundcompGoal).toHaveProperty('competence')
            expect(foundcompGoal).toHaveProperty('target', 1)
@@ -49,8 +59,7 @@ describe('CompetenceGoal Model Test', () => {
         })
 
         test('Competence Goal saveActive', async ()=>{
-            const CompGoalModel = new CompetenceGoal().getModelForClass(CompetenceGoal);
-            
+            const  compGoalRepository = await connection.getCustomRepository(CompetenceGoalRepository);
             const compGoal = {
                 name: 'mówić dzień dobry brudnej babie',
                 competence: "uprzejmość",
@@ -59,9 +68,8 @@ describe('CompetenceGoal Model Test', () => {
 
             let now = parse('2019-01-31');
 
-            const competenceGoal = new CompGoalModel(compGoal);
-            
-            const foundcompGoal = await competenceGoal.saveActive(now);
+                        
+            const foundcompGoal = await compGoalRepository.saveActive(compGoal, now);
             expect(foundcompGoal).not.toBeNull()
             expect(foundcompGoal).toHaveProperty('status', GoalStatus.ACTIVE)
             const activeGoalPerf = foundcompGoal.performance;
@@ -71,6 +79,5 @@ describe('CompetenceGoal Model Test', () => {
             expect(activeGoalPerf.dayCount(now)).toBe(1);
             expect(activeGoalPerf.weekCount(now)).toBe(1);
             })
-    
-    
+        
 });

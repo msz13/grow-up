@@ -1,4 +1,4 @@
-import { GoalStatus } from "../../common/graphql.schema";
+import { GoalStatus } from "../models/competenceGoal.entity";
 
 export class UpdateCompetenceGoalInput{
 

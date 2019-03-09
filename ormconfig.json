@@ -1,6 +1,6 @@
 {
   "type": "mongodb",
-  "url": "mongodb://grow-up:grow-up1@ds161112.mlab.com:61112/grow-up",
+  "url": "mongodb://grow-up:grow-up1@ds161112.mlab.com:61112/grow-up", 
   "synchronize": true,
   "logging": false,
   "entities": [

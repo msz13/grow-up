@@ -1,83 +1,118 @@
 import { prop, instanceMethod } from "typegoose";
 import { differenceInCalendarDays, eachDay, addDays } from "date-fns";
+import { Column, ObjectIdColumn, BeforeInsert } from "typeorm";
+import { ObjectID } from "mongodb";
+import { LocalDate } from "js-joda";
+import {Node} from '../../common/databaseUtil/baseClasses'
 
-export class GoalDayPerf {
-    constructor (date: Date, perfCount?: number){
+export class GoalDayPerf extends Node {
+    constructor (date: DateStr, perfCount?: number){
+        super()   
         this.date= date;
-        if (perfCount) {this.setProperties(perfCount)}              
+        if (perfCount!=undefined) {this.setProperties(perfCount)}    //moze do usuniecia
+                 
      }
-    date: Date
+
+    @Column()
+    id: ObjectID
+    
+    @Column()
+    date?: DateStr
+    @Column()
     perfCount: number = null;
+    @Column()
     targetIsDone: boolean = null;
 
     setProperties(perfCount: number) {
         this.perfCount=perfCount;
         this.targetIsDone=false;
     }
+
+       
 }
 
 
-export  class GoalPerf  {
+export  abstract class GoalPerf extends Node {
 
-    constructor (startActive: Date, overallPerf?: number) {
-       this.startActive= startActive;
+    constructor (startActive: LocalDate, overallPerf?: number) {
+      super()
+      this.startActive= startActive.toString();
        }
  
-     @prop()
-     startActive: Date;
+     @Column()
+     startActive?: DateStr;
            
      
-     @prop({default: 0})
-     overallPerf: number = 0;
+     @Column()
+     overallPerf?: number = 0;
  
-     @prop({default: 0})
-     goalPerfEffectivenes: number = 0;
+     @Column()
+     goalPerfEffectivenes?: number = 0;
        
  
  }
  
  export class ActiveGoalPerf extends GoalPerf{
      
-    constructor (startActive: Date){
+    constructor (startActive: LocalDate){
         super(startActive);
-        this.createGoalDayPerfList(startActive);       
-        this._whenToAddDayPerf=addDays(startActive,7);
+        this.goalDaysPerf=this.createGoalDayPerfList(startActive);       
+        }
+
+           
+     @Column()
+     goalDaysPerf?: GoalDayPerf[];
+
+     needsToUpdateGoalPerf(actualDate: DateStr){
+       return (this.getLastDayPerf().date<actualDate)? true: false
+      
+     }
+       
+     getLastDayPerf() {
+       return this.goalDaysPerf[this.goalDaysPerf.length-1]
+     }
+    
+     createGoalDayPerfList (from?: LocalDate) {
+       const  startDate = (from)? from : LocalDate.parse(this.getLastDayPerf().date).plusDays(1)
+       const daysGoalPerf: GoalDayPerf[]=[]
+
+       for (let i = 0; i <= 8; i++) {
+         let day = startDate.plusDays(i).toString();
+         daysGoalPerf.push(new GoalDayPerf(day, 0))      
+        }
+
+       return daysGoalPerf
+     }
+
+    updatePerf(value: number, target: number) {
+      this.goalDaysPerf[0].perfCount=value;
+      const dayPerf = this.goalDaysPerf[0]
+
+      if ((dayPerf.perfCount>=target)&&!dayPerf.targetIsDone) {
+        this.goalPerfEffectivenes++
+        this.goalDaysPerf[0].targetIsDone=true
+        }
+
+      else if ((dayPerf.perfCount<target)&&dayPerf.targetIsDone) {
+        this.goalPerfEffectivenes--
+        this.goalDaysPerf[0].targetIsDone=false
+        }
     }
 
-         
-     @prop()
-     private _whenToAddDayPerf: Date;
-
-     @prop()
-     goalDayPerf: GoalDayPerf[];
- 
-     dayCount(day: Date) {
-         return differenceInCalendarDays(new Date(day), this.startActive)+2;
-     }
-     
-     @instanceMethod
-     weekCount(day) {
- 
-         return Math.ceil(this.dayCount(day)/7);
-     }
-
-     createGoalDayPerfList (startActive: Date) {
-        const dates = eachDay(startActive, addDays(startActive, 7))
-        const goalDayPerf =  dates.map((date: Date)=>{
-           return new GoalDayPerf(date, 0);
-           })
-        this.goalDayPerf=goalDayPerf;
-     }
  }
  
  export class GoalPerfHistory extends GoalPerf {
-     @prop()
-     endActive: Date;
+
+     constructor ({endActive, dayCount, weekCount, startActive}){
+           super(startActive)
+     }
+     @Column()
+     endActive: DateStr;
  
-     @prop()
+     @Column()
      dayCount: number;
  
-     @prop()
+     @Column()
      weekCount: number;
  
  }

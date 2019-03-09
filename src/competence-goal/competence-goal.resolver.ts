@@ -1,12 +1,16 @@
-import { Args, Mutation, Query, Resolver, ResolveProperty, Parent } from '@nestjs/graphql';
-import { GoalStatus } from '../common/graphql.schema';
+import { Args, Mutation, Query, Resolver, ResolveProperty, Parent, Info } from '@nestjs/graphql';
+import { GoalStatus } from './models/competenceGoal.entity';
 import { CompetenceGoalService } from './services/competence-goal.service'; 
 import { CreateCompetenceGoalInput } from './DTO/competence-goal-input';
-import { CompetenceGoal, } from './models/competence-goal.model';
+import { CompetenceGoal, } from './models/competenceGoal.entity';
 
 import moment = require('moment');
 import { UpdateCompetenceGoalInput } from './DTO/competence-goal-update-input';
 import format = require('date-fns/format');
+import { ActiveGoalPerf, GoalDayPerf } from './models/competence-goal-perf.model';
+
+import { parseResolveInfo, simplifyParsedResolveInfoFragmentWithType, ResolveTree } from 'graphql-parse-resolve-info';
+import {writeFile} from 'fs'
 
 
 
@@ -15,6 +19,7 @@ import format = require('date-fns/format');
 export class CompetenceGoalResolvers {
   constructor(private readonly competenceGoalService: CompetenceGoalService) {}
 
+ 
   @Query()
   competenceGoals(@Args("status") status: GoalStatus, @Args("competence") competence: string): Promise<CompetenceGoal[]>|CompetenceGoal{
     
@@ -27,9 +32,16 @@ export class CompetenceGoalResolvers {
   }
 
   @Mutation()
-  createCompGoal(@Args('competenceGoalInput') args: CreateCompetenceGoalInput): Promise<CompetenceGoal> {
+  createCompGoal(@Args('competenceGoalInput') args: CreateCompetenceGoalInput, @Info() resolverInfo: any): Promise<CompetenceGoal> {
    
-    return this.competenceGoalService.create(args);
+    /* Take args from day perf field and put to findActive
+    const parsedResolveInfoFragment = parseResolveInfo(resolverInfo);
+    const  simpleInfo=   simplifyParsedResolveInfoFragmentWithType(
+      parsedResolveInfoFragment as ResolveTree,
+      resolverInfo.returnType
+  );*/
+    
+       return this.competenceGoalService.create(args);
   } 
 
   //@Mutation()
@@ -70,35 +82,47 @@ export class CompetenceGoalResolvers {
   //    return this.competenceGoalService.update(id, args);
   //}
   
-
-  //@ResolvePrperty()
-  //goalWeekPerf(@Parent() competenceGoal) {
-       
-  //  return competenceGoal.goalWeekPerf[0];
- // }
-
- // @ResolveProperty("dayGoalPerf")
- // dayGoalPerf (@Parent() competenceGoal, @Args("dayOfWeek") dayOfWeek: number ){
- //  const dayGoalPerf = competenceGoal[0].goalWeekPerf.daysGaolPerf[dayOfWeek];
- //   return dayGoalPerf;
- // } 
-
+/*
+    
+     
   
-  //@ResolveProperty()
-  //dayCount(@Parent() competenceGoal: CompetenceGoal, @Args('day') day: Date) {
-  
-  //return competenceGoal.dayCount(format(day, 'YYYY-MM-DD'));
-  //}
 
   //@ResolveProperty()
   //weekCount(@Parent() competenceGoal: CompetenceGoal, @Args('day') day: Date) {
   // return  competenceGoal.weekCount(day);
        
   //}
-
-  
+/*
+  @Resolver('ActiveGoalPerf')
+  @ResolveProperty('dayCount')
+  dayCount(@Parent() competenceGoal: CompetenceGoal) {
+  console.log("Day Count called")
+  return 13;  //competenceGoal.performance.dayCount(day);
    
+  }*/
+
 }
+
+
+@Resolver('ActiveGoalPerf')
+export class ActiveGoalPerfResolver {
+  constructor(private readonly competenceGoalService: CompetenceGoalService) {}
+
+  @ResolveProperty('dayCount')
+  dayCount(@Parent() goalPerf: ActiveGoalPerf) {
+  console.log('DayCount Resolver called')
+  //return this.competenceGoalService.dayCount(goalPerf.startActive);
+  }
+
+  @ResolveProperty('goalDayPerf')
+  goalDayPerf(@Parent() goalPerf: ActiveGoalPerf, @Args('from') from: DateStr, @Args('to') to: DateStr){
+    console.log("Goal day Perf resolver called", from.toString())
+          return this.competenceGoalService.getGoalDayPerf(goalPerf.goalDaysPerf, from, to)
+  }
+
+
+}
+
 
 
 

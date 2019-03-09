@@ -1,6 +1,4 @@
-import { GoalStatus, CompetenceGoalInput } from "../../common/graphql.schema";
-
-export class CreateCompetenceGoalInput implements CompetenceGoalInput {
+export class CreateCompetenceGoalInput {
 
 
 name: string;

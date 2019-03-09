@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
-import { CompetenceGoal} from '../models/competence-goal.model';
-import { GoalStatus } from '../../common/graphql.schema';
+import { Injectable, Inject } from '@nestjs/common';
+import { CompetenceGoal} from '../models/competenceGoal.entity';
+import { GoalStatus } from '../models/competenceGoal.entity';
 import { CreateCompetenceGoalInput } from '../DTO/competence-goal-input';
 import { InjectModel } from 'nestjs-typegoose';
 import { ModelType } from 'typegoose';
@@ -9,6 +9,11 @@ import { UpdateCompetenceGoalInput } from '../DTO/competence-goal-update-input';
 import format = require('date-fns/format');
 import { startOfToday, addDays, eachDay } from 'date-fns';
 import { GoalDayPerf, ActiveGoalPerf, GoalPerf } from '../models/competence-goal-perf.model';
+import { InjectRepository } from '@nestjs/typeorm';
+import { CompetenceGoalRepository } from '../repositories/competence-goal.repository';
+import { Repository, MongoRepository } from 'typeorm';
+import { UserDateTimeService } from '../../user-profile/user-date-time.service/user-date-time.service';
+import { convert, LocalDate, nativeJs, ChronoUnit } from 'js-joda';
 
 //!!! przemysleć sprawę dat, czy bierzemy z argumentów czy z moment, czy moment dajemy do serwisu
 
@@ -18,52 +23,78 @@ export class CompetenceGoalService {
    
  
    constructor (
-     //  @InjectModel (CompetenceGoal) 
-     //  private readonly compGoalModel: ModelType<CompetenceGoal>,
-      ) {}
+     @InjectRepository(CompetenceGoalRepository)
+     private readonly competenceGoalRepository?: CompetenceGoalRepository,
+   
+     private readonly userDate?: UserDateTimeService
+     ) {}
 
-      createGoalDayPerfList (startActive: Date) {
+     /* createGoalDayPerfList (startActive: Date) {
          const dates = eachDay(startActive, addDays(startActive, 6))
          return dates.map((date: Date)=>{
             return new GoalDayPerf(date, 0);
             })
-      }
+      }*/
 
-      getGoalDayPerf(activeGoalPerf: ActiveGoalPerf, from: Date, to: Date) {
-         return activeGoalPerf.goalDayPerf.filter((goalDayPerf: GoalDayPerf)=>{
-            return goalDayPerf.date >= from && goalDayPerf.date<= to;
-
+      getGoalDayPerf(goalDayPerf: GoalDayPerf[], from: DateStr, to: DateStr) {
+         return goalDayPerf.filter((goalDayPerf: GoalDayPerf)=>{
+            return goalDayPerf.date >= from && goalDayPerf.date<= to
          })
       }
-      /*
+      
+      getGoalDayPerf2(dates:string[],from: string, to: string) {
+         return dates.filter((dates)=>{
+            return dates>= from && dates<= to
+         })
+      }
        
-   async findActive(competence: string): Promise<CompetenceGoal[]> {
-       
-      const compGoals =  await this.compGoalModel.findActive(competence);
+   async findActive(daysPerfTo: DateStr, Competence?: string): Promise<CompetenceGoal[]> {
+    
+      let queryResult: CompetenceGoal[]=[]
+    
+      const cursor=   this.competenceGoalRepository.createEntityCursor().filter({status: GoalStatus.ACTIVE})
 
-      return  compGoals;
+ 
+       while (await cursor.hasNext()) {
+       const compGoal: CompetenceGoal =  await cursor.next()
+
+       if (compGoal.performance.needsToUpdateGoalPerf(daysPerfTo)) {        
+         compGoal.performance.goalDaysPerf = await this.addDaysPerf(compGoal, daysPerfTo)
+       }
+       
+       queryResult.push(compGoal)
+       
+      }
+   
+     
+      return queryResult;
     
      }
       
    
    async create(newGoal: CreateCompetenceGoalInput): Promise<CompetenceGoal> {
                 
-     const createdCompGoal: CompetenceGoal = new this.compGoalModel(newGoal);  
+     const createdCompGoal: CompetenceGoal = this.competenceGoalRepository.create(newGoal)  
                 
-     return await createdCompGoal.saveActive(startOfToday());             
+     return await this.competenceGoalRepository.saveActive(createdCompGoal, this.userDate.getUserDate().toString());             
    }
 
-   /*
-  async incPerf(comGoal_Id: string, fDayOfWeek: number, dayOfWeek: number, value: number): Promise <boolean> {
-      
-     let updateField = `goalWeekPerf.$.daysGaolPerf.${dayOfWeek}`;
-       
-     const upd = await this.compGoalModel.updateOne({_id: comGoal_Id,"goalWeekPerf.fDayOfWeek": fDayOfWeek},
-     {$inc: {[updateField]: value, "goalPerf.overallPerf": value}});
-    
-     return upd.nModified;
-}
+   
+  async updatePerf(comGoal_Id: any /**zamienic na odpowiedni typ */, day: DateStr, value: number) {
+     
+      const compGoal = await this.competenceGoalRepository.findActiveforUpdPerf(comGoal_Id, day);
+      compGoal.performance.updatePerf(value, compGoal.target);
 
+      const {performance: { goalPerfEffectivenes}, performance: {goalDaysPerf: [goalDayPerf]}} = compGoal;
+      
+      return await this.competenceGoalRepository.updatePerf(comGoal_Id, goalPerfEffectivenes, goalDayPerf);
+
+      
+      }
+      
+
+
+/*
 
    async statusToHold(id: string) {
       console.time("toInActive")
@@ -152,11 +183,24 @@ export class CompetenceGoalService {
      return await this.compGoalModel.findByIdAndUpdate({_id: id},update, {new: true});
 
    }
-
-   dayCount (startActive: number): number {
-      const sActv = moment.utc(startActive);
-      const now = moment.utc().startOf("day");
-      return now.diff(sActv, "day")+1;
-   }
 */
+   dayCount (startActive: Date): number {
+      
+      return this.userDate.getUserDate().until(LocalDate.from(nativeJs(startActive)),ChronoUnit.DAYS)+1;
+   }
+
+   private async addDaysPerf (compGoal: CompetenceGoal, maxDate: DateStr): Promise<GoalDayPerf[]> {
+    
+      const newdayPerfList = compGoal.performance.createGoalDayPerfList()
+  
+      const update = {$push: {"performance.goalDaysPerf": {$each: newdayPerfList}}}
+  
+      await this.competenceGoalRepository.updateOne({_id: compGoal.id},update)
+      
+      return newdayPerfList.filter((dayPerf: GoalDayPerf)=>{
+        return dayPerf.date<=maxDate
+      })  
+        
+      } 
+
 }
