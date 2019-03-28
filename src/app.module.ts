@@ -8,6 +8,7 @@ import {TypeOrmModule} from '@nestjs/typeorm';
 import { CompetenceGoal } from './competence-goal/models/competenceGoal.entity';
 import { ObjectIdScalar } from './common/scalars/objectId';
 import { UserProfileModule } from '../src/user-profile/user-profile.module';
+import { ActiveCompetenceGoal } from './competence-goal/models/active-competence-goal.entity';
 
 
 @Module({
@@ -16,9 +17,8 @@ import { UserProfileModule } from '../src/user-profile/user-profile.module';
 
       typePaths: ['./**/*.graphql'],
 
-      installSubscriptionHandlers: true,
-      resolvers: {Date: GraphQLDate},
-      
+     // installSubscriptionHandlers: true,
+            
     }),
     TypeOrmModule.forRoot({
       "type": "mongodb",
@@ -27,7 +27,7 @@ import { UserProfileModule } from '../src/user-profile/user-profile.module';
       "logging": false,
       "entities": [
        // "/**/**.entity{.ts,.js}"
-       CompetenceGoal
+       ActiveCompetenceGoal
       ],
       "subscribers": [
         "src/subscriber/*.js"

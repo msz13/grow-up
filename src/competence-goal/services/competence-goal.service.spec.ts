@@ -8,6 +8,8 @@ import {CompetenceGoalModule} from '../competence-goal.module';
 import {ObjectID} from 'mongodb'
 import { ExportDeclaration } from 'ts-simple-ast';
 import { LocalDate } from 'js-joda';
+import { ActiveCompetenceGoal } from '../models/active-competence-goal.entity';
+import { UserProfileModule } from '../../user-profile/user-profile.module';
 
 
 
@@ -30,7 +32,7 @@ describe('Competence Goal Service', ()=>{
             "logging": false,
             "entities": [
              // "/**/**.entity{.ts,.js}"
-             CompetenceGoal
+             ActiveCompetenceGoal
             ],
             "subscribers": [
               "src/subscriber/*.js"
@@ -43,7 +45,7 @@ describe('Competence Goal Service', ()=>{
               "migrationsDir": "src/migration",
               "subscribersDir": "src/subscriber"
             }
-          }),CompetenceGoalModule],
+          }),CompetenceGoalModule, UserProfileModule],
         }).compile();
         competenceGoalService = module.get<CompetenceGoalService>(CompetenceGoalService);
         
@@ -55,25 +57,26 @@ describe('Competence Goal Service', ()=>{
         expect(competenceGoalService).toBeDefined();
       });
 
+ describe('Competence Goal Service Methods',()=>{
+ 
+  beforeAll(async()=> {
+    await competenceGoalService.create({
+      name: "Dwa",
+      competence: "KompetencjaJeden",
+      target: 1,        
+  })
 
+  });
+  
+      
       test.only('Find Active',async ()=>{
        const  compGoals = await competenceGoalService.findActive('2019-03-09')
        console.dir(compGoals)
+       expect(compGoals).toHaveLength(1)
+       expect(compGoals[0]).toBeInstanceOf(ActiveCompetenceGoal)
       }
       )
     
-
-       it.skip('createGoalDayPerfList',()=>{
-            const lastDay = {
-                date:  parse ('2019-02-04'),
-                perfCount: 0,
-                targetIsDone: false,
-            } 
-            const goalDayPerf = competenceGoalService.createGoalDayPerfList(subDays(parse ('2019-02-04'), 6));
-            expect(goalDayPerf).toHaveLength(7);
-            expect(goalDayPerf[6]).toEqual(lastDay);
-           
-        }) 
 
         test ('getGoalDayPerf', ()=>{
             const now = LocalDate.parse('2019-02-02')
@@ -90,7 +93,7 @@ describe('Competence Goal Service', ()=>{
             expect(chosenGoalDayPerf).toHaveLength(3) 
             
         })
-
+/*
         test ("Update Perf", async ()=>{
             const comGoalInput = {
                 name: "Jeden",
@@ -107,6 +110,8 @@ describe('Competence Goal Service', ()=>{
          expect(goalDayPerf.goalPerfEffectivenes).toBe(1)
 
           
+        })
+*/
         })
    
    

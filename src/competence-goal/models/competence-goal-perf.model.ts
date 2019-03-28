@@ -4,31 +4,24 @@ import { Column, ObjectIdColumn, BeforeInsert } from "typeorm";
 import { ObjectID } from "mongodb";
 import { LocalDate } from "js-joda";
 import {Node} from '../../common/databaseUtil/baseClasses'
+import {DateStr} from '../../common/types'
 
 export class GoalDayPerf extends Node {
     constructor (date: DateStr, perfCount?: number){
         super()   
         this.date= date;
-        if (perfCount!=undefined) {this.setProperties(perfCount)}    //moze do usuniecia
-                 
+                        
      }
 
-    @Column()
-    id: ObjectID
-    
+        
     @Column()
     date?: DateStr
     @Column()
-    perfCount: number = null;
+    perfCount: number = 0;
     @Column()
-    targetIsDone: boolean = null;
+    targetIsDone: boolean = false;
 
-    setProperties(perfCount: number) {
-        this.perfCount=perfCount;
-        this.targetIsDone=false;
-    }
-
-       
+          
 }
 
 
@@ -76,7 +69,7 @@ export  abstract class GoalPerf extends Node {
        const  startDate = (from)? from : LocalDate.parse(this.getLastDayPerf().date).plusDays(1)
        const daysGoalPerf: GoalDayPerf[]=[]
 
-       for (let i = 0; i <= 8; i++) {
+       for (let i = 0; i <8; i++) {
          let day = startDate.plusDays(i).toString();
          daysGoalPerf.push(new GoalDayPerf(day, 0))      
         }

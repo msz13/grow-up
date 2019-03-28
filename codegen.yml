@@ -1,6 +1,9 @@
 overwrite: true
+schema: "http://localhost:3000/graphql"
+documents: "d:\\programowanie\\grow-up-front\\src\\competence-day.graphql"
 generates:
-  ./src/types.ts:
-    schema: ./src/competences/competences.graphql
+  src/generated/angular-service.ts:
     plugins:
-     - typescript-common
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-apollo-angular"

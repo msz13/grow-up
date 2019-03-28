@@ -1,0 +1,70 @@
+  
+interface CompetenceGoal {
+  id: ObjectID
+  name: String! 
+  competence: String
+  target: Int #daily target of goal
+  status: GoalStatus
+  perfHistory: [GoalPerfHistory]
+ }
+
+ enum GoalStatus{
+    ACTIVE
+    DONE
+    HOLD
+ }
+
+
+
+ type GoalDayPerf {
+     id: ID!
+     date: Date
+     perfCount: Int
+     targetIsDone: Boolean
+ }
+
+type ActiveCompetenceGoal implements CompetenceGoal {
+    id: ObjectID
+    name: String! 
+    competence: String
+    target: Int #daily target of goal
+    status: GoalStatus      
+    perfHistory: [GoalPerfHistory] 
+    
+    # date of start active status
+    startActive: Date
+    #number of days of peforming goal
+    dayCount: Int
+    weekCount: Int
+    # score of perf
+    overallPerf: Int #czy potrzebne?
+    goalEffectivenes: Int #number of days on target
+    goalDaysPerf(from: Date, to: Date): [GoalDayPerf!]
+       
+}
+
+ type PassiveCompetenceGoal {
+    id: ObjectID
+    name: String! 
+    competence: String
+    target: Int #daily target of goal
+    status: GoalStatus
+    perfHistory: [GoalPerfHistory]
+
+ }
+
+
+ type GoalPerfHistory implements GoalPerf {
+     
+    
+     # date of start active status
+     startActive: Date
+     #date od end active status
+     endActive: Date
+     #number of days of peforming goal
+     dayCount: Int
+     # score of perf
+     overallPerf: Int #czy wywalić?
+     weekCount: Int
+     goalEffectivenes: Int
+ }

@@ -1,0 +1,99 @@
+{
+         "name": "createCompGoal",
+         "alias": "createCompGoal",
+         "args": {
+                  "competenceGoalInput": {
+                           "name": "Nie kupować kebabów",
+                           "competence": "Opanowanie",
+                           "target": 1
+                  }
+         },
+         "fieldsByTypeName": {
+                  "CompetenceGoal": {
+                           "id": {
+                                    "name": "id",
+                                    "alias": "id",
+                                    "args": {},
+                                    "fieldsByTypeName": {}
+                           },
+                           "name": {
+                                    "name": "name",
+                                    "alias": "name",
+                                    "args": {},
+                                    "fieldsByTypeName": {}
+                           },
+                           "status": {
+                                    "name": "status",
+                                    "alias": "status",
+                                    "args": {},
+                                    "fieldsByTypeName": {}
+                           },
+                           "competence": {
+                                    "name": "competence",
+                                    "alias": "competence",
+                                    "args": {},
+                                    "fieldsByTypeName": {}
+                           },
+                           "target": {
+                                    "name": "target",
+                                    "alias": "target",
+                                    "args": {},
+                                    "fieldsByTypeName": {}
+                           },
+                           "performance": {
+                                    "name": "performance",
+                                    "alias": "performance",
+                                    "args": {},
+                                    "fieldsByTypeName": {
+                                             "ActiveGoalPerf": {
+                                                      "startActive": {
+                                                               "name": "startActive",
+                                                               "alias": "startActive",
+                                                               "args": {},
+                                                               "fieldsByTypeName": {}
+                                                      },
+                                                      "overallPerf": {
+                                                               "name": "overallPerf",
+                                                               "alias": "overallPerf",
+                                                               "args": {},
+                                                               "fieldsByTypeName": {}
+                                                      },
+                                                      "goalEffectivenes": {
+                                                               "name": "goalEffectivenes",
+                                                               "alias": "goalEffectivenes",
+                                                               "args": {},
+                                                               "fieldsByTypeName": {}
+                                                      },
+                                                      "goalDayPerf": {
+                                                               "name": "goalDayPerf",
+                                                               "alias": "goalDayPerf",
+                                                               "args": {},
+                                                               "fieldsByTypeName": {
+                                                                        "GoalDayPerf": {
+                                                                                 "date": {
+                                                                                          "name": "date",
+                                                                                          "alias": "date",
+                                                                                          "args": {},
+                                                                                          "fieldsByTypeName": {}
+                                                                                 },
+                                                                                 "targetIsDone": {
+                                                                                          "name": "targetIsDone",
+                                                                                          "alias": "targetIsDone",
+                                                                                          "args": {},
+                                                                                          "fieldsByTypeName": {}
+                                                                                 },
+                                                                                 "perfCount": {
+                                                                                          "name": "perfCount",
+                                                                                          "alias": "perfCount",
+                                                                                          "args": {},
+                                                                                          "fieldsByTypeName": {}
+                                                                                 }
+                                                                        }
+                                                               }
+                                                      }
+                                             }
+                                    }
+                           }
+                  }
+         }
+}

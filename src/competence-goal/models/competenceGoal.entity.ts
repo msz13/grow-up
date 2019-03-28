@@ -1,4 +1,4 @@
-import {Entity, ObjectIdColumn, Column} from 'typeorm';
+import {Entity, ObjectIdColumn, Column, Index} from 'typeorm';
 import {ObjectID} from 'mongodb'
 import { ActiveGoalPerf, GoalPerf } from './competence-goal-perf.model';
 
@@ -10,28 +10,34 @@ export enum GoalStatus {
 
 const Document = Entity
 
-@Document()
-export class CompetenceGoal  {
+
+export abstract class CompetenceGoal  {
+
+    constructor (name?: string, status?: GoalStatus, target?: number, competence?: string,) {
+        this.name=name
+        this.competence=competence
+        this.target=target
+        this.status=status
+    }
 
     @ObjectIdColumn()
-    id: ObjectID;
-   
+    id?: ObjectID;
+
+       
     @Column()
     name: string;
 
     @Column()
+    @Index()
     competence?: string;
 
     @Column()
-    target?: number;
+    target: number=1;
 
     @Column({type: "enum",
      enum: GoalStatus})
-     status?: GoalStatus;
-      
-    @Column(type=>ActiveGoalPerf)
-    performance?: ActiveGoalPerf;
-
+     status: GoalStatus;
+   
     @Column(type=>GoalPerf)
     perfHistory?: GoalPerf[];
 /*

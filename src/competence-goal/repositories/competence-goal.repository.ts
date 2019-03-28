@@ -4,56 +4,51 @@ import {ObjectID} from 'mongodb'
 import { GoalStatus } from "../models/competenceGoal.entity"
 import { ActiveGoalPerf, GoalDayPerf } from "../models/competence-goal-perf.model";
 import { LocalDate, nativeJs, convert } from "js-joda";
+import { ActiveCompetenceGoal } from "../models/active-competence-goal.entity";
+import { DateStr } from "../../common/types";
+import { CreateCompetenceGoalInput } from "../DTO/competence-goal-input";
 
-@EntityRepository(CompetenceGoal)
-export class CompetenceGoalRepository extends MongoRepository<CompetenceGoal> {
+@EntityRepository(ActiveCompetenceGoal)
+export class CompetenceGoalRepository extends MongoRepository<ActiveCompetenceGoal> {
 
-  
-    
-   async  saveActive (competenceGoal: CompetenceGoal,startActive:LocalDate) {
-
-        competenceGoal.status=GoalStatus.ACTIVE;
+      
+   async  saveActive (competenceGoal: CreateCompetenceGoalInput,startActive:Date) {
         
-        competenceGoal.performance= new ActiveGoalPerf(startActive);    
-               
-        const savedCompGoal: CompetenceGoal = await this.save(competenceGoal);     
-               
-        return savedCompGoal;
+      const createdCompGoal = new ActiveCompetenceGoal(competenceGoal, startActive)
+
+      return await this.save(createdCompGoal);                               
+      
     }
 
       
   
 
     async findActiveforUpdPerf(compGoal_Id: ObjectID, day: DateStr ){
-      const projecton = {target: 1, 'performance.goalPerfEffectivenes': 1, 'performance.goalDaysPerf.$': 1}         
-       return await this.createEntityCursor({_id: compGoal_Id, "performance.goalDaysPerf.date": day }).project(projecton).next()
+       const projecton = {target: 1, 'daysOnTarget': 1, 'goalDaysPerf.$': 1}         
+       return await this.createEntityCursor({_id: compGoal_Id, "goalDaysPerf.date": day }).project(projecton).next()
     }
 
     async updatePerf(id: ObjectID, effeciveness: number, dayPerf: GoalDayPerf) {
             
             const query = {
               _id: id,
-               "performance.goalDaysPerf.date": dayPerf.date
+               "goalDaysPerf.date": dayPerf.date
             }
       
             const update = {
              $set: {
-               "performance.goalPerfEffectivenes": effeciveness,
-               "performance.goalDaysPerf.$": dayPerf
+               "daysOnTarget": effeciveness,
+               "goalDaysPerf.$.perfCount": dayPerf.perfCount,
+               "goalDaysPerf.$.targetIsDone": dayPerf.targetIsDone
              }
            }
 
-           const projection = {
-            _id: 0, 
-            performance: 1
-           }
-
-          const {value: {performance}} = await this.findOneAndUpdate(
-            query, 
-            update, 
-            {maxTimeMS: 300, returnOriginal: false, projection: projection})
            
-          return  performance
+          const {value: updatedCompGoal} = await this.findOneAndUpdate(query,
+            update, 
+            {maxTimeMS: 300, returnOriginal: false})
+           
+          return  updatedCompGoal
     }
 
 

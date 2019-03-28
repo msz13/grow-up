@@ -2,87 +2,95 @@ scalar Date
 scalar ObjectID
 
 type Query {
-    competenceGoals(status: GoalStatus, competence: String): [CompetenceGoal]
+  activeCompetenceGoals(competence: String): [ActiveCompetenceGoal]!
 
 }
 
 type Mutation {
-    createCompGoal(competenceGoalInput: CompetenceGoalInput): CompetenceGoal
+   createActiveCompGoal(competenceGoalInput: CompetenceGoalInput): ActiveCompetenceGoal
    # goalStatusToHold(goal_Id: ID): Boolean
    # goalStatusToDone(goal_Id: ID): Boolean
    # goalStatusToActive(goal_Id: ID): Boolean
-   updatePerf(compGoal_Id: ID, fDayOfWeek: GraphQLDate, dayOfWeek: Int): updateCompGoalPerfPayload
-   deleteCompGoal(goal_Id: ID): Boolean
-    updateCompGoal(goal_Id: ID, updateCompetenceGoalInput: UpdateCompetenceGoalInput): CompetenceGoal
+   updatePerf(updateCompGoalPerfInput: UpdateCompGoalPerfInput): UpdateCompGoalPerfPayload
+ #  deleteCompGoal(goal_Id: ID): Boolean
+ #  updateCompGoal(goal_Id: ID, updateCompetenceGoalInput: UpdateCompetenceGoalInput): UpdateActiveCompetenceGoalPayload
 }
   
-type CompetenceGoal {
-    id: ObjectID
+type ActiveCompetenceGoal {
+    id: ID!
     name: String! 
     competence: String
     target: Int #daily target of goal
     status: GoalStatus      
-    perfHistory: [GoalPerfHistory] 
+   # perfHistory: [GoalPerfHistory] 
     
-    # date of start active status
+    #date of start active status
     startActive: Date
     #number of days of peforming goal
     dayCount: Int
     weekCount: Int
     # score of perf
     overallPerf: Int #czy potrzebne?
-    goalEffectivenes: Int #number of days on target
+    daysOnTarget: Int #number of days on target
+    todayPerf: GoalDayPerf
     goalDaysPerf(from: Date, to: Date): [GoalDayPerf!]
  }
 
- enum GoalStatus{
-    ACTIVE
-    DONE
-    HOLD
- }
+enum GoalStatus{
+   ACTIVE
+   DONE
+   HOLD
+}
 
 
 
  type GoalDayPerf {
-     date: Date
-     perfCount: Int
-     targetIsDone: Boolean
+  id: ID!
+  date: Date
+  dayOfWeek: Int
+  perfCount: Int
+  targetIsDone: Boolean
  }
 
  
- type GoalPerfHistory  {
+ #type GoalPerfHistory  {
      # date of start active status
-     startActive: Date
+     #startActive: Date
      #date od end active status
-     endActive: Date
+    # endActive: Date
      #number of days of peforming goal
-     dayCount: Int
+#     dayCount: Int
      # score of perf
-     overallPerf: Int #czy wywalić?
-     weekCount: Int
-     goalEffectivenes: Int
- }
+ #    overallPerf: Int #czy wywalić?
+ #    weekCount: Int
+ #    goalEffectivenes: Int
+ #}
 
 
  input CompetenceGoalInput {
-     name: String!
-     competence: String!
-     target: Int!
-     }
+   name: String!
+   competence: String!
+   target: Int!
+ }
+
+ input UpdateCompGoalPerfInput {
+   compGoal_Id: ID
+   day: Date
+   value: Int
+ }
+
+#
+#input UpdateCompetenceGoalInput {
+#     name: String
+#     competence: String
+#     target: Int
+#     }
 
 
-input UpdateCompetenceGoalInput {
-     name: String
-     competence: String
-     target: Int
-     }
-
-
-type updateCompGoalPerfPayload {
+type UpdateCompGoalPerfPayload {
     
-    competenceGoal: CompetenceGoal
+   activeCompetenceGoal: ActiveCompetenceGoal
 }
-     }
 
 
 

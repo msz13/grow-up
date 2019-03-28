@@ -3,6 +3,8 @@ import {CompetenceGoalRepository} from './competence-goal.repository';
 import { createConnection, Connection} from 'typeorm';
 import { GoalDayPerf, GoalPerf, ActiveGoalPerf } from '../models/competence-goal-perf.model';
 import {ObjectID} from 'mongodb'
+import { TextStyle } from 'js-joda';
+import { ActiveCompetenceGoal } from '../models/active-competence-goal.entity';
 
 
 
@@ -13,93 +15,115 @@ describe ('Competence-Gaol Repository test', ()=>{
 
     let connection: Connection;
     let competenceGoalRepository: CompetenceGoalRepository;
+    let compGoalResult:ActiveCompetenceGoal;
 
-    beforeAll(async ()=>{ connection = await createConnection({"type": "mongodb",
-    "url": "mongodb://grow-up:grow-up1@ds161112.mlab.com:61112/grow-up", 
-    "synchronize": true,
-    "logging": true,
-    "entities": [
-     // "/**/**.entity{.ts,.js}"
-     CompetenceGoal
-    ]} 
-    )
-    console.log("connection created")
-    competenceGoalRepository = connection.getCustomRepository(CompetenceGoalRepository);
-})
-
-afterAll (()=> {connection.close()})
-    
-test('It should update day performance list', async ()=>{
-    
-    const comGoal = {
+    const comGoalInput = {
         name: "Dwa",
         competence: "KompetencjaJeden",
         target: 1,        
     }
 
-    const createdCompGoal: CompetenceGoal = competenceGoalRepository.create(comGoal)  
-    await competenceGoalRepository.saveActive(createdCompGoal, '2019-02-22');
-
-    const comGoalActive:CompetenceGoal[] =  await competenceGoalRepository.findActive();
-    expect(comGoalActive).toBeDefined();
-    expect(comGoalActive[0].performance.goalDaysPerf).toHaveLength(16);
-    await competenceGoalRepository.deleteOne({_id: comGoalActive[0].id})
+    beforeAll(async ()=>{ try {connection = await createConnection({"type": "mongodb",
+    "url": "mongodb://grow-up:grow-up1@ds161112.mlab.com:61112/grow-up", 
+    "synchronize": true,
+    "logging": true,
+    "entities": [
+     // "/**/**.entity{.ts,.js}"
+     ActiveCompetenceGoal
+    ]} 
+    )
+    console.log("connection created")
+    } catch(e) {console.error(e)}
     
-    
-
+   competenceGoalRepository = connection.getCustomRepository(CompetenceGoalRepository);   
 })
 
-describe("Update Performance", async ()=>{
-    
-    let compGoal1_2: CompetenceGoal
-    
-    beforeAll(async ()=>{
-        const comGoal = {
-            name: "Find for Upd Perf",
-            competence: "KompetencjaJeden",
-            target: 1,        
-        }
-        
-        const compGoal1: CompetenceGoal = competenceGoalRepository.create(comGoal) 
-        compGoal1_2 = await competenceGoalRepository.saveActive(compGoal1, '2019-02-01');
-    })
+afterAll (()=> {connection.close()})
 
-    afterAll(async ()=> {
-      await  competenceGoalRepository.deleteOne({_id: compGoal1_2.id})
-    });
+test('Create Competence Goal Repoistory', ()=>{
+    expect(connection).toBeDefined()
+    expect(competenceGoalRepository).toBeDefined()
+})
+
+test('save active', async ()=>{
+   const  expected = {
+        name: "Dwa",
+        competence: "KompetencjaJeden",
+        target: 1,
+        status: GoalStatus.ACTIVE, 
+        startActive: '2019-03-11'
+
+    }
+
+    compGoalResult= await competenceGoalRepository.saveActive(comGoalInput, new Date ('2019-03-11'))
+    expect(compGoalResult).toMatchObject(expected)
+    expect(compGoalResult).toBeInstanceOf(ActiveCompetenceGoal)
+    expect(compGoalResult.goalDaysPerf).toHaveLength(8)
+    expect(compGoalResult.dayCount('2019-03-11')).toBe(1)
     
 
     
-    
-       
+})
 
-    test('Should find comp Goal for Update Perf', async ()=>{
+test('Should find comp Goal for Update Perf', async ()=>{
          
                 
-        console.time('Find Activ for Upd Perf')
-        const compGoal1_3 = await competenceGoalRepository.findActiveforUpdPerf(compGoal1_2.id, "2019-02-02")
-        console.timeEnd('Find Activ for Upd Perf') //const compGoal1_3 = await competenceGoalRepository.createEntityCursor({_id: compGoal1_2.id}).next()
-        
-        expect(compGoal1_3).toBeDefined()
-        expect(compGoal1_3).toHaveProperty('target', 1)
-        expect(compGoal1_3.name).toBeUndefined()
-        expect(compGoal1_3.performance.goalDaysPerf).toHaveLength(1)    
+    console.time('Find Activ for Upd Perf')
+    const compGoal1_3 = await competenceGoalRepository.findActiveforUpdPerf(compGoalResult.id, "2019-03-13")
+    console.timeEnd('Find Activ for Upd Perf') //const compGoal1_3 = await competenceGoalRepository.createEntityCursor({_id: compGoal1_2.id}).next()
     
-    })
-    
-    test("Should return updated Goal Perf", async ()=>{
-      const  dayPerf:GoalDayPerf = new GoalDayPerf("2019-02-02", 1 )
+    expect(compGoal1_3).toBeDefined()
+    expect(compGoal1_3).toHaveProperty('target', 1)
+    expect(compGoal1_3.name).toBe('')
+    expect(compGoal1_3.goalDaysPerf).toHaveLength(1)    
+
+})
+
+
+test("Should return updated Goal Perf", async ()=>{
+    const  dayPerf:GoalDayPerf = {
+       id: 13, 
+       date: "2019-03-11",
+       perfCount: 1,
+       targetIsDone: false
+    }
+     console.dir(dayPerf)
+    console.time('Update Perf')
+    const updatedPerfCompGoal: ActiveCompetenceGoal = await competenceGoalRepository.updatePerf(compGoalResult.id,4,dayPerf)
+    console.timeEnd('Update Perf')
+  
+   expect(updatedPerfCompGoal.startActive).toBeTruthy()
+   expect(updatedPerfCompGoal.goalPerfEffectivenes).toBe(4)
+   expect(updatedPerfCompGoal.goalDaysPerf[0]).toMatchObject({
+       id: expect.any(Number),
+       date: "2019-03-11",
+       perfCount: 1,
+       targetIsDone: false
        
-      console.time('Update Perf')
-      const goalPerf = await competenceGoalRepository.updatePerf(compGoal1_2.id,4,dayPerf)
-      console.timeEnd('Update Perf')
+     })
+   
+  })
     
-     expect(goalPerf.startActive).toBeTruthy()
-     expect(goalPerf.goalPerfEffectivenes).toBe(0)
+test('It should delate one', async ()=>{
+    
+    
+      
+    await competenceGoalRepository.deleteOne({_id: compGoalResult.id})
+    const deleted = await competenceGoalRepository.findByIds([compGoalResult.id])
+    expect(deleted).toHaveLength(0)
+    
+
+})
+
 
      
-    })
-})
+      
+
+    
+    
+    
+
+
 
 
 

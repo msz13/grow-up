@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import {ZonedDateTime, ZoneId} from 'js-joda';
 import 'js-joda-timezone'
+import { convertToTimeZone } from 'date-fns-timezone';
 
 @Injectable()
 export class UserDateTimeService {
@@ -12,7 +13,8 @@ export class UserDateTimeService {
     userTimeZone: string;
 
     getUserDate(){
-        return ZonedDateTime.now(ZoneId.of(this.userTimeZone)).toLocalDate();
+        return convertToTimeZone(Date.now(), {timeZone: this.userTimeZone})
+        //return ZonedDateTime.now(ZoneId.of(this.userTimeZone)).toLocalDate();
     }
 
 }
