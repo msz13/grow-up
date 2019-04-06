@@ -1,20 +1,21 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CompetenceGoal } from '../models/competenceGoal.entity';
 import { GoalStatus } from '../models/competenceGoal.entity';
 import { CreateCompetenceGoalInput } from '../DTO/competence-goal-input';
-
 import { UpdateCompetenceGoalInput } from '../DTO/competence-goal-update-input';
 import format = require('date-fns/format');
 import { startOfToday, addDays, eachDay, differenceInCalendarDays } from 'date-fns';
-import { GoalDayPerf, ActiveGoalPerf, GoalPerf } from '../models/competence-goal-perf.model';
+import { GoalDayPerf, GoalPerf } from '../models/competence-goal-perf.model';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CompetenceGoalRepository } from '../repositories/competence-goal.repository';
-import { Repository, MongoRepository} from 'typeorm';
-import {ObjectID} from 'mongodb'
+
+import {ObjectID, ObjectId} from 'mongodb'
 import { UserDateTimeService } from '../../user-profile/user-date-time.service/user-date-time.service';
-import { convert, LocalDate, nativeJs, ChronoUnit } from 'js-joda';
+
 import { DateStr } from '../../common/types';
 import { ActiveCompetenceGoal } from '../models/active-competence-goal.entity';
+import { UserIdService } from './user-id/user-id.service';
+
 
 //!!! przemysleć sprawę dat, czy bierzemy z argumentów czy z moment, czy moment dajemy do serwisu
 
@@ -25,9 +26,8 @@ export class CompetenceGoalService {
 
    constructor(
       @InjectRepository(CompetenceGoalRepository)
-      private readonly competenceGoalRepository?: CompetenceGoalRepository,
-
-      private readonly userDate?: UserDateTimeService
+      private readonly competenceGoalRepository: CompetenceGoalRepository,
+      private readonly userDate: UserDateTimeService,     
    ) { }
 
    /* createGoalDayPerfList (startActive: Date) {
@@ -73,8 +73,11 @@ export class CompetenceGoalService {
 
 
 
-
    async updatePerf(compGoal_Id: ObjectID /**zamienic na odpowiedni typ */, day: DateStr, value: number): Promise<ActiveCompetenceGoal> {
+     
+      
+      
+
       const compGoal = await this.competenceGoalRepository.findActiveforUpdPerf(compGoal_Id, day);
       
       compGoal.updatePerf(value, compGoal.target);
@@ -185,12 +188,8 @@ export class CompetenceGoalService {
    }
       return true;
    }
-   
-      async delete(id: string) {
-      
-         await  this.compGoalModel.deleteOne({_id: id});
-         return true;
-      }
+   /*
+    
    
       async update (id: string, update: UpdateCompetenceGoalInput) {
        
@@ -198,6 +197,15 @@ export class CompetenceGoalService {
    
       }
    */
+
+async delete(id: string) {
+      
+  const result = await  this.competenceGoalRepository.deleteOne({_id: new ObjectId(id)}) as any
+  
+  if (result.n=1) { return id }
+  else console.log('not deleted') ;
+   
+}
    
 
    private async addDaysPerf(goalDaysPerf: GoalDayPerf[], comGoalId: ObjectID, maxDate: DateStr): Promise<GoalDayPerf[]> {

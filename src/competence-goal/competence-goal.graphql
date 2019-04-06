@@ -1,5 +1,5 @@
 scalar Date
-scalar ObjectID
+
 
 type Query {
   activeCompetenceGoals(competence: String): [ActiveCompetenceGoal]!
@@ -12,9 +12,11 @@ type Mutation {
    # goalStatusToDone(goal_Id: ID): Boolean
    # goalStatusToActive(goal_Id: ID): Boolean
    updatePerf(updateCompGoalPerfInput: UpdateCompGoalPerfInput): UpdateCompGoalPerfPayload
- #  deleteCompGoal(goal_Id: ID): Boolean
- #  updateCompGoal(goal_Id: ID, updateCompetenceGoalInput: UpdateCompetenceGoalInput): UpdateActiveCompetenceGoalPayload
+   deleteCompGoal(goal_Id: ID!):  DeleteCompetenceGoalPayload
+    # updateCompGoal(goal_Id: ID, updateCompetenceGoalInput: UpdateCompetenceGoalInput): UpdateActiveCompetenceGoalPayload
 }
+  
+ 
   
 type ActiveCompetenceGoal {
     id: ID!
@@ -91,6 +93,11 @@ type UpdateCompGoalPerfPayload {
     
    activeCompetenceGoal: ActiveCompetenceGoal
 }
+
+
+type DeleteCompetenceGoalPayload {
+   deletedCompetenceGoalId: ID!
+  }
 
 
 

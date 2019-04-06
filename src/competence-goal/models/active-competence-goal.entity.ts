@@ -1,6 +1,5 @@
 import { CompetenceGoal, GoalStatus } from "./competenceGoal.entity";
 import { Column, Entity } from "typeorm";
-import { LocalDate } from "js-joda";
 import { GoalDayPerf } from "./competence-goal-perf.model";
 import { DateStr } from "../../common/types";
 import { format, addDays, parse, differenceInCalendarDays } from "date-fns";

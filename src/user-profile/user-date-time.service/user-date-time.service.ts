@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import {ZonedDateTime, ZoneId} from 'js-joda';
-import 'js-joda-timezone'
 import { convertToTimeZone } from 'date-fns-timezone';
 
 @Injectable()

@@ -6,12 +6,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CompetenceGoalRepository } from './repositories/competence-goal.repository';
 import { ObjectIdScalar } from '../common/scalars/objectId';
 import { UserProfileModule } from '../user-profile/user-profile.module';
-import { ActiveGoalPerf } from './models/competence-goal-perf.model';
 import { ActiveCompetenceGoal } from './models/active-competence-goal.entity';
 import { DateScalar } from '../common/scalars/date.scalar';
+import { UserIdService } from './services/user-id/user-id.service';
 
 @Module({
     imports: [TypeOrmModule.forFeature([ActiveCompetenceGoal, CompetenceGoalRepository]), UserProfileModule],
-    providers: [CompetenceGoalService, CompetenceGoalResolvers, ObjectIdScalar, DateScalar]
+    providers: [CompetenceGoalService, CompetenceGoalResolvers, DateScalar, UserIdService]
 })
 export class CompetenceGoalModule {}

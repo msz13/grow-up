@@ -1,6 +1,6 @@
 import {Entity, ObjectIdColumn, Column, Index} from 'typeorm';
 import {ObjectID} from 'mongodb'
-import { ActiveGoalPerf, GoalPerf } from './competence-goal-perf.model';
+import { GoalPerf } from './competence-goal-perf.model';
 
 export enum GoalStatus {
     ACTIVE = "ACTIVE",

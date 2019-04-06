@@ -2,11 +2,10 @@ import { CompetenceGoal } from "../models/competenceGoal.entity";
 import { EntityRepository, MongoRepository} from "typeorm";
 import {ObjectID} from 'mongodb'
 import { GoalStatus } from "../models/competenceGoal.entity"
-import { ActiveGoalPerf, GoalDayPerf } from "../models/competence-goal-perf.model";
-import { LocalDate, nativeJs, convert } from "js-joda";
 import { ActiveCompetenceGoal } from "../models/active-competence-goal.entity";
 import { DateStr } from "../../common/types";
 import { CreateCompetenceGoalInput } from "../DTO/competence-goal-input";
+import {GoalDayPerf} from '../models/competence-goal-perf.model'
 
 @EntityRepository(ActiveCompetenceGoal)
 export class CompetenceGoalRepository extends MongoRepository<ActiveCompetenceGoal> {
@@ -50,6 +49,16 @@ export class CompetenceGoalRepository extends MongoRepository<ActiveCompetenceGo
            
           return  updatedCompGoal
     }
+
+    exampl() {
+      const find = this.createCursor()
+
+      const select = find.limit(30).skip(10)
+
+      console.log(JSON.stringify(select))      
+    }
+
+    
 
 
 }

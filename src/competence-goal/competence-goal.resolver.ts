@@ -1,16 +1,17 @@
-import { Args, Mutation, Query, Resolver, ResolveProperty, Parent, Info } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver, ResolveProperty, Parent, Info, Context } from '@nestjs/graphql';
 import { CompetenceGoalService } from './services/competence-goal.service'; 
 import { CreateCompetenceGoalInput } from './DTO/competence-goal-input';
-import { CompetenceGoal, } from './models/competenceGoal.entity';
 import {ActiveCompetenceGoal} from './models/active-competence-goal.entity'
-import moment = require('moment');
+
 import { UpdateCompetenceGoalInput, UpdatePerfInput, UpdateCompGoalPerfPayload } from './DTO/competence-goal-update-input';
 import format = require('date-fns/format');
 import { parseResolveInfo, simplifyParsedResolveInfoFragmentWithType, ResolveTree } from 'graphql-parse-resolve-info';
-import {writeFile} from 'fs'
+
 import { DateStr } from '../common/types';
 import { ValidationPipe } from '@nestjs/common';
-import { ObjectID } from 'mongodb';
+import { ContextCreator } from '@nestjs/core/helpers/context-creator';
+
+
 
 
 
@@ -35,8 +36,7 @@ export class CompetenceGoalResolvers {
 
   @Mutation('createActiveCompGoal')
   createActiveCompGoal(@Args('competenceGoalInput') args: CreateCompetenceGoalInput, @Info() resolverInfo: any): Promise<ActiveCompetenceGoal> {
-    
-          return this.competenceGoalService.create(args);
+    return this.competenceGoalService.create(args);
   }
   @ResolveProperty('id')
   id(@Parent() competenceGoal) {
@@ -61,8 +61,9 @@ export class CompetenceGoalResolvers {
   }
 
   @Mutation('updatePerf')
-  async updatePerf(@Args('updateCompGoalPerfInput', new ValidationPipe({transform: true})) input: UpdatePerfInput) {
-    JSON.stringify(input)
+  async updatePerf(@Args('updateCompGoalPerfInput', new ValidationPipe({transform: true})) input: UpdatePerfInput, @Context() ctx: object) {
+    
+    
     const updatedCompGoal =  await this.competenceGoalService.updatePerf(input.compGoal_Id,input.day, input.value)
      return new UpdateCompGoalPerfPayload(updatedCompGoal)
   }
@@ -86,10 +87,12 @@ export class CompetenceGoalResolvers {
   //  return this.competenceGoalService.statusToDone(id);
   //}
 
-  //@Mutation()
-  //deleteCompGoal(@Args("goal_Id") id: string) {
-  //  return this.competenceGoalService.delete(id);
-  //}
+  @Mutation()
+  async deleteCompGoal(@Args("goal_Id") id: string) {
+    console.log(id)
+   const  deletedCompetenceGoalId = await this.competenceGoalService.delete(id);
+    return {deletedCompetenceGoalId: deletedCompetenceGoalId}
+  }
 
   //@Mutation()
   //updateComGoal(@Args("goal_Id") id: string, @Args('updateCompetenceGoalInput') args: UpdateCompetenceGoalInput) {
