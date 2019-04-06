@@ -11,6 +11,7 @@
     "removeComments": true,
 
     "noLib": false,
+    "lib": ["esnext.asynciterable"],
 
     "allowSyntheticDefaultImports": true,
 
