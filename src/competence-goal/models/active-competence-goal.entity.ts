@@ -8,7 +8,7 @@ import { ObjectID } from "mongodb";
 @Entity('competencegoals')
 export class ActiveCompetenceGoal extends CompetenceGoal {
 
-  constructor({ name = '', competence = '', target = 1 } = {}, startActive?: DateStr) {
+  constructor({ name = '', competence = '', target = 1 } = {}, startActive?: Date) {
     super(name, GoalStatus.ACTIVE, target, competence)
     this.startActive = format(startActive, 'YYYY-MM-DD')
     this.goalDaysPerf = this.createGoalDayPerfList(startActive);
@@ -45,7 +45,8 @@ export class ActiveCompetenceGoal extends CompetenceGoal {
 
   createGoalDayPerfList(from?: Date|'lastDay') {
     const startDate = (from==='lastDay')? addDays(this.getLastDayPerf().date, 1) : from  
-    const daysGoalPerf: GoalDayPerf[] = []
+    const daysGoalPerf: GoalDayPerf[] = [] as Array<GoalDayPerf>
+    
 
     for (let i = 0; i < 8; i++) {
       let day = format(addDays(startDate, i), 'YYYY-MM-DD')

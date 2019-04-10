@@ -11,8 +11,7 @@
     "removeComments": true,
 
     "noLib": false,
-    "lib": ["esnext.asynciterable"],
-
+    
     "allowSyntheticDefaultImports": true,
 
     "emitDecoratorMetadata": true,
@@ -20,6 +19,8 @@
     "experimentalDecorators": true,
 
     "target": "es6",
+
+    "lib": ["dom","es6","dom.iterable","scripthost", "esnext.asynciterable"],
 
     "sourceMap": true,
 
