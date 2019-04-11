@@ -13,7 +13,7 @@ async function bootstrap() {
   const  app = await NestFactory.create(ApplicationModule);
   
   app.useGlobalPipes(new ValidationPipe());
-  await app.listen('/tmp/nginx.socket');
+  await app.listen(3000);
 
   fs.openSync('/tmp/app-initialized', 'w');
   
