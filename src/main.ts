@@ -15,7 +15,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(3000);
 
-  fs.openSync('/tmp/app-initialized', 'w');
+  console.log('opened socet file: '+fs.openSync('/tmp/app-initialized', 'w'));
   
   
   if (module.hot) {
