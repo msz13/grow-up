@@ -8,6 +8,7 @@ import { UserProfileModule } from './user-profile/user-profile.module';
 import { ActiveCompetenceGoal } from './competence-goal/models/active-competence-goal.entity';
 import {ConfigModule, ConfigService} from 'nestjs-config';
 import { HelloModule } from './hello/hello.module';
+import { AuthModule } from './auth/auth.module';
 import * as path from 'path'
 
 
@@ -27,7 +28,8 @@ import * as path from 'path'
     ConfigModule.load(path.resolve(__dirname, 'config', '**/!(*.d).{ts,js}')),    
     CompetenceGoalModule,
     UserProfileModule,
-    HelloModule
+    HelloModule,
+    AuthModule
   ],
   providers: [],
   })

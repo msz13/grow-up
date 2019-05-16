@@ -9,7 +9,7 @@ import { GoalDayPerf, GoalPerf } from '../models/competence-goal-perf.model';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CompetenceGoalRepository } from '../repositories/competence-goal.repository';
 
-import {ObjectID, ObjectId} from 'mongodb'
+import { ObjectID, ObjectId } from 'mongodb'
 import { UserDateTimeService } from '../../user-profile/user-date-time.service/user-date-time.service';
 
 import { DateStr } from '../../common/types';
@@ -27,7 +27,7 @@ export class CompetenceGoalService {
    constructor(
       @InjectRepository(CompetenceGoalRepository)
       private readonly competenceGoalRepository: CompetenceGoalRepository,
-      private readonly userDate: UserDateTimeService,     
+      private readonly userDate: UserDateTimeService,
    ) { }
 
    /* createGoalDayPerfList (startActive: Date) {
@@ -46,7 +46,7 @@ export class CompetenceGoalService {
    async findActive(Competence?: string): Promise<ActiveCompetenceGoal[]> {
 
       let queryResult: ActiveCompetenceGoal[] = []
-      const daysPerfTo = format (this.userDate.getUserDate(), 'YYYY-MM-DD')
+      const daysPerfTo = format(this.userDate.getUserDate(), 'YYYY-MM-DD')
 
       const cursor = this.competenceGoalRepository.createEntityCursor().filter({ status: GoalStatus.ACTIVE })
 
@@ -56,9 +56,9 @@ export class CompetenceGoalService {
 
          if (compGoal.needsToUpdateGoalPerf(daysPerfTo)) {
             compGoal.goalDaysPerf = await this.addDaysPerf(
-            compGoal.createGoalDayPerfList(), 
-            compGoal.id, 
-            daysPerfTo
+               compGoal.createGoalDayPerfList(),
+               compGoal.id,
+               daysPerfTo
             )
          }
 
@@ -74,15 +74,15 @@ export class CompetenceGoalService {
 
 
    async updatePerf(compGoal_Id: ObjectID /**zamienic na odpowiedni typ */, day: DateStr, value: number): Promise<ActiveCompetenceGoal> {
-     
-      
-      
+
+
+
 
       const compGoal = await this.competenceGoalRepository.findActiveforUpdPerf(compGoal_Id, day);
-      
+
       compGoal.updatePerf(value, compGoal.target);
 
-      const { daysOnTarget, goalDaysPerf: [goalDayPerf]  } = compGoal;
+      const { daysOnTarget, goalDaysPerf: [goalDayPerf] } = compGoal;
 
       return await this.competenceGoalRepository.updatePerf(compGoal_Id, daysOnTarget, goalDayPerf);
 
@@ -96,20 +96,20 @@ export class CompetenceGoalService {
    }
 
    getTodayPerf(goalDayPerf: GoalDayPerf[]): GoalDayPerf {
-      const userNow = format(this.userDate.getUserDate(),'YYYY-MM-DD')
-       const [todayGoal] = goalDayPerf.filter((goalDayPerf: GoalDayPerf)=>{
-        return goalDayPerf.date==userNow
-     })
-     
-     return todayGoal
+      const userNow = format(this.userDate.getUserDate(), 'YYYY-MM-DD')
+      const [todayGoal] = goalDayPerf.filter((goalDayPerf: GoalDayPerf) => {
+         return goalDayPerf.date == userNow
+      })
+
+      return todayGoal
 
    }
 
-   dayCount(startActive: DateStr){
-       return differenceInCalendarDays(this.userDate.getUserDate(), startActive) + 1
+   dayCount(startActive: DateStr) {
+      return differenceInCalendarDays(this.userDate.getUserDate(), startActive) + 1
    }
 
-   
+
 
    /*
    
@@ -198,19 +198,19 @@ export class CompetenceGoalService {
       }
    */
 
-async delete(id: string) {
-      
-  const result = await  this.competenceGoalRepository.deleteOne({_id: new ObjectId(id)}) as any
-  
-  if (result.n=1) { return id }
-  else console.log('not deleted') ;
-   
-}
-   
+   async delete(id: string) {
+
+      const result = await this.competenceGoalRepository.deleteOne({ _id: new ObjectId(id) }) as any
+
+      if (result.n = 1) { return id }
+      else console.log('not deleted');
+
+   }
+
 
    private async addDaysPerf(goalDaysPerf: GoalDayPerf[], comGoalId: ObjectID, maxDate: DateStr): Promise<GoalDayPerf[]> {
 
-      const update = { $push: { "goalDaysPerf": { $each: [...goalDaysPerf]} } }
+      const update = { $push: { "goalDaysPerf": { $each: [...goalDaysPerf] } } }
 
       await this.competenceGoalRepository.updateOne({ _id: comGoalId }, update)
 

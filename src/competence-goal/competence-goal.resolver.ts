@@ -89,8 +89,7 @@ export class CompetenceGoalResolvers {
 
   @Mutation()
   async deleteCompGoal(@Args("goal_Id") id: string) {
-    console.log(id)
-   const  deletedCompetenceGoalId = await this.competenceGoalService.delete(id);
+    const  deletedCompetenceGoalId = await this.competenceGoalService.delete(id);
     return {deletedCompetenceGoalId: deletedCompetenceGoalId}
   }
 
