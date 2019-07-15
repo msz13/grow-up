@@ -21,42 +21,30 @@ export class GoalDayPerf extends Node {
 
           
 }
-
-
-export  abstract class GoalPerf extends Node {
-
-    constructor (startActive: DateStr, overallPerf?: number) {
-      super()
-      this.startActive= startActive.toString();
-       }
- 
-     @Column()
-     startActive?: DateStr;
-           
-     
-     @Column()
-     overallPerf?: number = 0;
- 
-     @Column()
-     goalPerfEffectivenes?: number = 0;
-       
- 
- }
- 
   
- export class GoalPerfHistory extends GoalPerf {
+ export class GoalPerfHistory  {
 
-     constructor ({endActive, dayCount, weekCount, startActive}){
-           super(startActive)
+     constructor (startActive, endActive, dayCount, daysOnTarget){
+         this.startActive = startActive
+         this.endActive = endActive
+         this.dayCount = dayCount
+         this.daysOnTarget = daysOnTarget           
      }
+    
+     @Column()
+     startActive: DateStr
+
      @Column()
      endActive: DateStr;
  
      @Column()
      dayCount: number;
  
+     // @Column()
+     // weekCount: number;
+
      @Column()
-     weekCount: number;
+     daysOnTarget: number;
  
  }
  

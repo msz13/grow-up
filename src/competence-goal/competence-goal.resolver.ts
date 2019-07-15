@@ -1,6 +1,6 @@
 import { Args, Mutation, Query, Resolver, ResolveProperty, Parent, Info, Context } from '@nestjs/graphql';
 import { CompetenceGoalService } from './services/competence-goal.service'; 
-import { CreateCompetenceGoalInput } from './DTO/competence-goal-input';
+import { CreateCompetenceGoalInput, CreateCompetenceGoalInputByU } from './DTO/competence-goal-input';
 import {ActiveCompetenceGoal} from './models/active-competence-goal.entity'
 
 import { UpdateCompetenceGoalInput, UpdatePerfInput, UpdateCompGoalPerfPayload } from './DTO/competence-goal-update-input';
@@ -8,8 +8,9 @@ import format = require('date-fns/format');
 import { parseResolveInfo, simplifyParsedResolveInfoFragmentWithType, ResolveTree } from 'graphql-parse-resolve-info';
 
 import { DateStr } from '../common/types';
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, UsePipes, } from '@nestjs/common';
 import { ContextCreator } from '@nestjs/core/helpers/context-creator';
+import {UserId, ArgsUserId} from '../common/user.decorator'
 
 
 
@@ -22,8 +23,9 @@ export class CompetenceGoalResolvers {
 
  
   @Query('activeCompetenceGoals')
-  activeCompetenceGoals(@Args("competence") competence: string): Promise<ActiveCompetenceGoal[]>{
-                 
+  activeCompetenceGoals(@Args("competence") competence: string, @Context() ctx: any, @UserId() userId: any): Promise<ActiveCompetenceGoal[]>{
+      console.log('contex'+ctx.user.id)
+      console.log('decorator'+userId)
       return  this.competenceGoalService.findActive(competence);
      /* Take args from day perf field and put to findActive
     const parsedResolveInfoFragment = parseResolveInfo(resolverInfo);
@@ -35,8 +37,9 @@ export class CompetenceGoalResolvers {
   }
 
   @Mutation('createActiveCompGoal')
-  createActiveCompGoal(@Args('competenceGoalInput') args: CreateCompetenceGoalInput, @Info() resolverInfo: any): Promise<ActiveCompetenceGoal> {
-    return this.competenceGoalService.create(args);
+  createActiveCompGoal(/*@Args('competenceGoalInput') args: CreateCompetenceGoalInput, */ @ArgsUserId('competenceGoalInput') argsUserId: CreateCompetenceGoalInputByU): Promise<ActiveCompetenceGoal> {
+    console.log(JSON.stringify(argsUserId, null, 2))
+    return this.competenceGoalService.create(argsUserId);
   }
   @ResolveProperty('id')
   id(@Parent() competenceGoal) {
@@ -52,12 +55,12 @@ export class CompetenceGoalResolvers {
 
   @ResolveProperty('goalDaysPerf')
   goalDayPerf(@Parent() compGoal: ActiveCompetenceGoal, @Args('from') from: DateStr, @Args('to') to: DateStr){
-         return this.competenceGoalService.getGoalDayPerf(compGoal.goalDaysPerf, from, to)
+    return this.competenceGoalService.getGoalDayPerf(compGoal.goalDaysPerf, from, to)
   }
 
   @ResolveProperty('todayPerf')
   todayPerf(@Parent() compGoal: ActiveCompetenceGoal ){
-       return this.competenceGoalService.getTodayPerf(compGoal.goalDaysPerf)
+    return this.competenceGoalService.getTodayPerf(compGoal.goalDaysPerf)
   }
 
   @Mutation('updatePerf')

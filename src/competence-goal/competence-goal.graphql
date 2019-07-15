@@ -8,8 +8,8 @@ type Query {
 
 type Mutation {
    createActiveCompGoal(competenceGoalInput: CompetenceGoalInput): ActiveCompetenceGoal
-   # goalStatusToHold(goal_Id: ID): Boolean
-   # goalStatusToDone(goal_Id: ID): Boolean
+    activeCompetenceGoalStatusToHold(goal_Id: ID): activeCompGoalStatusToHoldPayload
+    activeCompetenceGoalStatusToDone(goal_Id: ID): Boolean
    # goalStatusToActive(goal_Id: ID): Boolean
    updatePerf(updateCompGoalPerfInput: UpdateCompGoalPerfInput): UpdateCompGoalPerfPayload
    deleteCompGoal(goal_Id: ID!):  DeleteCompetenceGoalPayload
@@ -94,6 +94,9 @@ type UpdateCompGoalPerfPayload {
    activeCompetenceGoal: ActiveCompetenceGoal
 }
 
+type activeCompGoalStatusToHoldPayload {
+   competenceGoal: CompetenceGoal
+}
 
 type DeleteCompetenceGoalPayload {
    deletedCompetenceGoalId: ID!

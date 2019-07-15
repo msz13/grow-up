@@ -17,7 +17,7 @@ module.exports = {
       {
         test: /.tsx?$/,
        use: 'ts-loader',
-        exclude: /node_modules/,
+        exclude: [/node_modules/]
       },
     ],
   },
@@ -27,7 +27,7 @@ module.exports = {
   },
   plugins: [new webpack.HotModuleReplacementPlugin()],
   output: {
-    path: path.join(__dirname, 'dist'),
+    path: path.join(__dirname, 'distWP'),
     filename: 'server.js',
   },
 };

@@ -5,7 +5,7 @@ import { CreateCompetenceGoalInput } from '../DTO/competence-goal-input';
 import { UpdateCompetenceGoalInput } from '../DTO/competence-goal-update-input';
 import format = require('date-fns/format');
 import { startOfToday, addDays, eachDay, differenceInCalendarDays } from 'date-fns';
-import { GoalDayPerf, GoalPerf } from '../models/competence-goal-perf.model';
+import { GoalDayPerf, } from '../models/competence-goal-perf.model';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CompetenceGoalRepository } from '../repositories/competence-goal.repository';
 
@@ -15,6 +15,7 @@ import { UserDateTimeService } from '../../user-profile/user-date-time.service/u
 import { DateStr } from '../../common/types';
 import { ActiveCompetenceGoal } from '../models/active-competence-goal.entity';
 import { UserIdService } from './user-id/user-id.service';
+import { CreateCompetenceGoalInputByU } from 'dist/competence-goal/DTO/competence-goal-input';
 
 
 //!!! przemysleć sprawę dat, czy bierzemy z argumentów czy z moment, czy moment dajemy do serwisu
@@ -37,7 +38,7 @@ export class CompetenceGoalService {
           })
     }*/
 
-   async create(newGoal: CreateCompetenceGoalInput): Promise<ActiveCompetenceGoal> {
+   async create(newGoal: CreateCompetenceGoalInputByU): Promise<ActiveCompetenceGoal> {
 
       return await this.competenceGoalRepository.saveActive(newGoal, this.userDate.getUserDate());
 
@@ -55,11 +56,12 @@ export class CompetenceGoalService {
          const compGoal: ActiveCompetenceGoal = await cursor.next()
 
          if (compGoal.needsToUpdateGoalPerf(daysPerfTo)) {
-            compGoal.goalDaysPerf = await this.addDaysPerf(
-               compGoal.createGoalDayPerfList(),
+             const updDaysPerf = await this.addDaysPerf(
+               compGoal.createGoalDayPerfList('lastDay', differenceInCalendarDays(daysPerfTo, compGoal.getLastDayPerf().date) + 8),
                compGoal.id,
                daysPerfTo
             )
+            compGoal.goalDaysPerf=updDaysPerf
          }
 
          queryResult.push(compGoal)
@@ -75,9 +77,6 @@ export class CompetenceGoalService {
 
    async updatePerf(compGoal_Id: ObjectID /**zamienic na odpowiedni typ */, day: DateStr, value: number): Promise<ActiveCompetenceGoal> {
 
-
-
-
       const compGoal = await this.competenceGoalRepository.findActiveforUpdPerf(compGoal_Id, day);
 
       compGoal.updatePerf(value, compGoal.target);
@@ -85,7 +84,6 @@ export class CompetenceGoalService {
       const { daysOnTarget, goalDaysPerf: [goalDayPerf] } = compGoal;
 
       return await this.competenceGoalRepository.updatePerf(compGoal_Id, daysOnTarget, goalDayPerf);
-
 
    }
 
@@ -111,30 +109,34 @@ export class CompetenceGoalService {
 
 
 
-   /*
-   
-      async statusToHold(id: string) {
-         console.time("toInActive")
-         const compGoal = await this.compGoalModel.findById(id);
-   
-         //!!!poprawić w ubdate wyzerować poszczególne pola właściwości z dawnego goal perf i stworzuć nowy goal perf i zapisac w perfHistory 
-         if (compGoal.isActive()){
-                     
-         compGoal.setInActive(
-            this.dayCount(moment.utc().startOf("days").valueOf()),
-            moment.utc().startOf("day").valueOf(), 
-            GoalStatus.HOLD
-            );
-                          
-        await compGoal.save();
+      
+   async savePasive(id: ObjectID, status: GoalStatus) {
+      console.time("toInActive")
+      const activeCompGoal: ActiveCompetenceGoal = await this.competenceGoalRepository.createEntityCursor({id: ObjectID}).next();
+      
+       const perfHistory = activeCompGoal.createPerfHistory(format(this.userDate.getUserDate(),'YYYY-MM-DD'))
+        
+      
+       const { startActive, daysOnTarget, goalDaysPerf, ...compGoal} = activeCompGoal
+       
+       compGoal.perfHistory = [perfHistory]
+              
+       const result = this.competenceGoalRepository.replaceOne({id: id}, compGoal)
+
         console.timeEnd("toInActive")
-   
-        return true;
-      } else return false; // poprawić zwracane wartości i sprawdzić czy trzeba stosować warunek else
-         
-                 
+        
+        console.log(result)
+
+        if (result) {
+         return compGoal 
+      }
+
+        else throw Error('Update of Competence Goal status failed')
+  
+                        
         }
    
+        /*
         async toHold2(id: string){
            console.time("hold2")
          const compGoal= await this.compGoalModel.findById(id).select("status", "goalPerf");
@@ -210,7 +212,7 @@ export class CompetenceGoalService {
 
    private async addDaysPerf(goalDaysPerf: GoalDayPerf[], comGoalId: ObjectID, maxDate: DateStr): Promise<GoalDayPerf[]> {
 
-      const update = { $push: { "goalDaysPerf": { $each: [...goalDaysPerf] } } }
+      const update = { $push: { 'goalDaysPerf': { $each: [...goalDaysPerf] } } }
 
       await this.competenceGoalRepository.updateOne({ _id: comGoalId }, update)
 

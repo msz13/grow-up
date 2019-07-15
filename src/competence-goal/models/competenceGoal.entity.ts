@@ -1,6 +1,7 @@
 import {Entity, ObjectIdColumn, Column, Index} from 'typeorm';
 import {ObjectID} from 'mongodb'
-import { GoalPerf } from './competence-goal-perf.model';
+import { GoalPerfHistory } from './competence-goal-perf.model';
+
 
 export enum GoalStatus {
     ACTIVE = "ACTIVE",
@@ -11,18 +12,22 @@ export enum GoalStatus {
 const Document = Entity
 
 
-export abstract class CompetenceGoal  {
+export class CompetenceGoal  {
 
-    constructor (name?: string, status?: GoalStatus, target?: number, competence?: string,) {
+    constructor (name?: string, status?: GoalStatus, target?: number, competence?: string, createdBy?: string, perfHistory?: GoalPerfHistory) {
         this.name=name
         this.competence=competence
         this.target=target
         this.status=status
+        this.perfHistory.push(perfHistory)
+        this.createdBy = createdBy
     }
 
     @ObjectIdColumn()
     id?: ObjectID;
 
+    @Column()
+    createdBy: string
        
     @Column()
     name: string;
@@ -38,8 +43,8 @@ export abstract class CompetenceGoal  {
      enum: GoalStatus})
      status: GoalStatus;
    
-    @Column(type=>GoalPerf)
-    perfHistory?: GoalPerf[];
+    @Column(type=>GoalPerfHistory)
+    perfHistory?: GoalPerfHistory[];
 /*
     
     //sprawdzić, że zawsze przy robieniu active statusu tworza sie uzuwane pola

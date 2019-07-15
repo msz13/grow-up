@@ -1,1 +1,1 @@
-const IsoDate: string = 'YYYY-MM-DD'
+export const IsoDate: string = 'YYYY-MM-DD'

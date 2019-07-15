@@ -1,0 +1,799 @@
+Skrypt uruchomiony 2019-06-23 23:06:42+0200
+(base) ]0;msz13@msz13-Aspire-A515-51G: /media/msz13/DATA/programowanie/grow-up[01;32mmsz13@msz13-Aspire-A515-51G[00m:[01;34m/media/msz13/DATA/programowanie/grow-up[00m$ npm start
+[37;40mnpm[0m [0m[30;43mWARN[0m [0m[35mlifecycle[0m The node binary used for scripts is /snap/bin/node but npm is using /snap/node/2252/bin/node itself. Use the `--scripts-prepend-node-path` option to include the path for the node binary npm was executed with.
+[0m
+> grow-up@1.0.0 prestart /media/msz13/DATA/programowanie/grow-up
+> tsc -p tsconfig.build.json
+
+
+> grow-up@1.0.0 start /media/msz13/DATA/programowanie/grow-up
+> node dist/main.js
+
+[32m[Nest] 6283   - [39m2019-06-23 11:07 PM   [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+[32m[Nest] 6283   - [39m2019-06-23 11:07 PM   [38;5;3m[InstanceLoader] [39m[32mApplicationModule dependencies initialized[39m[38;5;3m +42ms[39m
+[32m[Nest] 6283   - [39m2019-06-23 11:07 PM   [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 6283   - [39m2019-06-23 11:07 PM   [38;5;3m[InstanceLoader] [39m[32mUserProfileModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 6283   - [39m2019-06-23 11:07 PM   [38;5;3m[InstanceLoader] [39m[32mJwtModule dependencies initialized[39m[38;5;3m +2ms[39m
+[32m[Nest] 6283   - [39m2019-06-23 11:07 PM   [38;5;3m[InstanceLoader] [39m[32mHelloModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 6283   - [39m2019-06-23 11:07 PM   [38;5;3m[InstanceLoader] [39m[32mAuthModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 6283   - [39m2019-06-23 11:07 PM   [38;5;3m[InstanceLoader] [39m[32mGraphQLModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 6283   - [39m2019-06-23 11:07 PM   [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +30ms[39m
+(node:6283) DeprecationWarning: current URL string parser is deprecated, and will be removed in a future version. To use the new parser, pass option { useNewUrlParser: true } to MongoClient.connect.
+[32m[Nest] 6283   - [39m2019-06-23 11:07 PM   [38;5;3m[InstanceLoader] [39m[32mTypeOrmCoreModule dependencies initialized[39m[38;5;3m +1181ms[39m
+[32m[Nest] 6283   - [39m2019-06-23 11:07 PM   [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 6283   - [39m2019-06-23 11:07 PM   [38;5;3m[InstanceLoader] [39m[32mCompetenceGoalModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 6283   - [39m2019-06-23 11:07 PM   [38;5;3m[RoutesResolver] [39m[32mHelloController {/}:[39m[38;5;3m +16ms[39m
+[32m[Nest] 6283   - [39m2019-06-23 11:07 PM   [38;5;3m[RouterExplorer] [39m[32mMapped {/, GET} route[39m[38;5;3m +6ms[39m
+[32m[Nest] 6283   - [39m2019-06-23 11:07 PM   [38;5;3m[RouterExplorer] [39m[32mMapped {/redirect, GET} route[39m[38;5;3m +3ms[39m
+[32m[Nest] 6283   - [39m2019-06-23 11:07 PM   [38;5;3m[RouterExplorer] [39m[32mMapped {/gettoken, POST} route[39m[38;5;3m +2ms[39m
+[32m[Nest] 6283   - [39m2019-06-23 11:07 PM   [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +206ms[39m
+contexfacebook|10217799873642215
+decoratorfacebook|10217799873642215
+args{"competenceGoalInput":{"name":"Programować","competence":"Informatyka","target":1}}
+ctx{"user":{"id":"facebook|10217799873642215"},"_extensionStack":{"extensions":[{"debug":true},{"options":{"stripFormattedExtensions":true,"calculateHttpHeaders":true,"defaultMaxAge":0},"hints":{},"defaultMaxAge":0}]}}
+info{
+  "fieldName": "createActiveCompGoal",
+  "fieldNodes": [
+    {
+      "kind": "Field",
+      "name": {
+        "kind": "Name",
+        "value": "createActiveCompGoal",
+        "loc": {
+          "start": 76,
+          "end": 96
+        }
+      },
+      "arguments": [
+        {
+          "kind": "Argument",
+          "name": {
+            "kind": "Name",
+            "value": "competenceGoalInput",
+            "loc": {
+              "start": 97,
+              "end": 116
+            }
+          },
+          "value": {
+            "kind": "Variable",
+            "name": {
+              "kind": "Name",
+              "value": "competenceGoalInput",
+              "loc": {
+                "start": 119,
+                "end": 138
+              }
+            },
+            "loc": {
+              "start": 118,
+              "end": 138
+            }
+          },
+          "loc": {
+            "start": 97,
+            "end": 138
+          }
+        }
+      ],
+      "directives": [],
+      "selectionSet": {
+        "kind": "SelectionSet",
+        "selections": [
+          {
+            "kind": "Field",
+            "name": {
+              "kind": "Name",
+              "value": "id",
+              "loc": {
+                "start": 146,
+                "end": 148
+              }
+            },
+            "arguments": [],
+            "directives": [],
+            "loc": {
+              "start": 146,
+              "end": 148
+            }
+          },
+          {
+            "kind": "Field",
+            "name": {
+              "kind": "Name",
+              "value": "name",
+              "loc": {
+                "start": 153,
+                "end": 157
+              }
+            },
+            "arguments": [],
+            "directives": [],
+            "loc": {
+              "start": 153,
+              "end": 157
+            }
+          },
+          {
+            "kind": "Field",
+            "name": {
+              "kind": "Name",
+              "value": "target",
+              "loc": {
+                "start": 162,
+                "end": 168
+              }
+            },
+            "arguments": [],
+            "directives": [],
+            "loc": {
+              "start": 162,
+              "end": 168
+            }
+          },
+          {
+            "kind": "Field",
+            "name": {
+              "kind": "Name",
+              "value": "competence",
+              "loc": {
+                "start": 173,
+                "end": 183
+              }
+            },
+            "arguments": [],
+            "directives": [],
+            "loc": {
+              "start": 173,
+              "end": 183
+            }
+          },
+          {
+            "kind": "Field",
+            "name": {
+              "kind": "Name",
+              "value": "dayCount",
+              "loc": {
+                "start": 188,
+                "end": 196
+              }
+            },
+            "arguments": [],
+            "directives": [],
+            "loc": {
+              "start": 188,
+              "end": 196
+            }
+          },
+          {
+            "kind": "Field",
+            "name": {
+              "kind": "Name",
+              "value": "daysOnTarget",
+              "loc": {
+                "start": 201,
+                "end": 213
+              }
+            },
+            "arguments": [],
+            "directives": [],
+            "loc": {
+              "start": 201,
+              "end": 213
+            }
+          },
+          {
+            "kind": "Field",
+            "name": {
+              "kind": "Name",
+              "value": "todayPerf",
+              "loc": {
+                "start": 218,
+                "end": 227
+              }
+            },
+            "arguments": [],
+            "directives": [],
+            "selectionSet": {
+              "kind": "SelectionSet",
+              "selections": [
+                {
+                  "kind": "Field",
+                  "name": {
+                    "kind": "Name",
+                    "value": "id",
+                    "loc": {
+                      "start": 236,
+                      "end": 238
+                    }
+                  },
+                  "arguments": [],
+                  "directives": [],
+                  "loc": {
+                    "start": 236,
+                    "end": 238
+                  }
+                },
+                {
+                  "kind": "Field",
+                  "name": {
+                    "kind": "Name",
+                    "value": "perfCount",
+                    "loc": {
+                      "start": 245,
+                      "end": 254
+                    }
+                  },
+                  "arguments": [],
+                  "directives": [],
+                  "loc": {
+                    "start": 245,
+                    "end": 254
+                  }
+                },
+                {
+                  "kind": "Field",
+                  "name": {
+                    "kind": "Name",
+                    "value": "targetIsDone",
+                    "loc": {
+                      "start": 261,
+                      "end": 273
+                    }
+                  },
+                  "arguments": [],
+                  "directives": [],
+                  "loc": {
+                    "start": 261,
+                    "end": 273
+                  }
+                },
+                {
+                  "kind": "Field",
+                  "name": {
+                    "kind": "Name",
+                    "value": "__typename",
+                    "loc": {
+                      "start": 280,
+                      "end": 290
+                    }
+                  },
+                  "arguments": [],
+                  "directives": [],
+                  "loc": {
+                    "start": 280,
+                    "end": 290
+                  }
+                }
+              ],
+              "loc": {
+                "start": 228,
+                "end": 296
+              }
+            },
+            "loc": {
+              "start": 218,
+              "end": 296
+            }
+          },
+          {
+            "kind": "Field",
+            "name": {
+              "kind": "Name",
+              "value": "__typename",
+              "loc": {
+                "start": 301,
+                "end": 311
+              }
+            },
+            "arguments": [],
+            "directives": [],
+            "loc": {
+              "start": 301,
+              "end": 311
+            }
+          }
+        ],
+        "loc": {
+          "start": 140,
+          "end": 315
+        }
+      },
+      "loc": {
+        "start": 76,
+        "end": 315
+      }
+    }
+  ],
+  "returnType": "ActiveCompetenceGoal",
+  "parentType": "Mutation",
+  "path": {
+    "key": "createActiveCompGoal"
+  },
+  "schema": {
+    "__validationErrors": [],
+    "__allowedLegacyNames": [],
+    "_queryType": "Query",
+    "_mutationType": "Mutation",
+    "_subscriptionType": null,
+    "_directives": [
+      "@skip",
+      "@include",
+      "@deprecated"
+    ],
+    "astNode": {
+      "kind": "SchemaDefinition",
+      "directives": [],
+      "operationTypes": [
+        {
+          "kind": "OperationTypeDefinition",
+          "operation": "query",
+          "type": {
+            "kind": "NamedType",
+            "name": {
+              "kind": "Name",
+              "value": "Query"
+            }
+          }
+        },
+        {
+          "kind": "OperationTypeDefinition",
+          "operation": "mutation",
+          "type": {
+            "kind": "NamedType",
+            "name": {
+              "kind": "Name",
+              "value": "Mutation"
+            }
+          }
+        }
+      ]
+    },
+    "_typeMap": {
+      "Query": "Query",
+      "String": "String",
+      "ActiveCompetenceGoal": "ActiveCompetenceGoal",
+      "ID": "ID",
+      "Int": "Int",
+      "GoalStatus": "GoalStatus",
+      "Date": "Date",
+      "GoalDayPerf": "GoalDayPerf",
+      "Boolean": "Boolean",
+      "Competences": "Competences",
+      "Mutation": "Mutation",
+      "CompetenceGoalInput": "CompetenceGoalInput",
+      "UpdateCompGoalPerfInput": "UpdateCompGoalPerfInput",
+      "UpdateCompGoalPerfPayload": "UpdateCompGoalPerfPayload",
+      "DeleteCompetenceGoalPayload": "DeleteCompetenceGoalPayload",
+      "__Schema": "__Schema",
+      "__Type": "__Type",
+      "__TypeKind": "__TypeKind",
+      "__Field": "__Field",
+      "__InputValue": "__InputValue",
+      "__EnumValue": "__EnumValue",
+      "__Directive": "__Directive",
+      "__DirectiveLocation": "__DirectiveLocation"
+    },
+    "_possibleTypeMap": {},
+    "_implementations": {},
+    "_extensionsEnabled": true
+  },
+  "fragments": {},
+  "operation": {
+    "kind": "OperationDefinition",
+    "operation": "mutation",
+    "name": {
+      "kind": "Name",
+      "value": "CreateActiveComGoal",
+      "loc": {
+        "start": 9,
+        "end": 28
+      }
+    },
+    "variableDefinitions": [
+      {
+        "kind": "VariableDefinition",
+        "variable": {
+          "kind": "Variable",
+          "name": {
+            "kind": "Name",
+            "value": "competenceGoalInput",
+            "loc": {
+              "start": 30,
+              "end": 49
+            }
+          },
+          "loc": {
+            "start": 29,
+            "end": 49
+          }
+        },
+        "type": {
+          "kind": "NamedType",
+          "name": {
+            "kind": "Name",
+            "value": "CompetenceGoalInput",
+            "loc": {
+              "start": 51,
+              "end": 70
+            }
+          },
+          "loc": {
+            "start": 51,
+            "end": 70
+          }
+        },
+        "directives": [],
+        "loc": {
+          "start": 29,
+          "end": 70
+        }
+      }
+    ],
+    "directives": [],
+    "selectionSet": {
+      "kind": "SelectionSet",
+      "selections": [
+        {
+          "kind": "Field",
+          "name": {
+            "kind": "Name",
+            "value": "createActiveCompGoal",
+            "loc": {
+              "start": 76,
+              "end": 96
+            }
+          },
+          "arguments": [
+            {
+              "kind": "Argument",
+              "name": {
+                "kind": "Name",
+                "value": "competenceGoalInput",
+                "loc": {
+                  "start": 97,
+                  "end": 116
+                }
+              },
+              "value": {
+                "kind": "Variable",
+                "name": {
+                  "kind": "Name",
+                  "value": "competenceGoalInput",
+                  "loc": {
+                    "start": 119,
+                    "end": 138
+                  }
+                },
+                "loc": {
+                  "start": 118,
+                  "end": 138
+                }
+              },
+              "loc": {
+                "start": 97,
+                "end": 138
+              }
+            }
+          ],
+          "directives": [],
+          "selectionSet": {
+            "kind": "SelectionSet",
+            "selections": [
+              {
+                "kind": "Field",
+                "name": {
+                  "kind": "Name",
+                  "value": "id",
+                  "loc": {
+                    "start": 146,
+                    "end": 148
+                  }
+                },
+                "arguments": [],
+                "directives": [],
+                "loc": {
+                  "start": 146,
+                  "end": 148
+                }
+              },
+              {
+                "kind": "Field",
+                "name": {
+                  "kind": "Name",
+                  "value": "name",
+                  "loc": {
+                    "start": 153,
+                    "end": 157
+                  }
+                },
+                "arguments": [],
+                "directives": [],
+                "loc": {
+                  "start": 153,
+                  "end": 157
+                }
+              },
+              {
+                "kind": "Field",
+                "name": {
+                  "kind": "Name",
+                  "value": "target",
+                  "loc": {
+                    "start": 162,
+                    "end": 168
+                  }
+                },
+                "arguments": [],
+                "directives": [],
+                "loc": {
+                  "start": 162,
+                  "end": 168
+                }
+              },
+              {
+                "kind": "Field",
+                "name": {
+                  "kind": "Name",
+                  "value": "competence",
+                  "loc": {
+                    "start": 173,
+                    "end": 183
+                  }
+                },
+                "arguments": [],
+                "directives": [],
+                "loc": {
+                  "start": 173,
+                  "end": 183
+                }
+              },
+              {
+                "kind": "Field",
+                "name": {
+                  "kind": "Name",
+                  "value": "dayCount",
+                  "loc": {
+                    "start": 188,
+                    "end": 196
+                  }
+                },
+                "arguments": [],
+                "directives": [],
+                "loc": {
+                  "start": 188,
+                  "end": 196
+                }
+              },
+              {
+                "kind": "Field",
+                "name": {
+                  "kind": "Name",
+                  "value": "daysOnTarget",
+                  "loc": {
+                    "start": 201,
+                    "end": 213
+                  }
+                },
+                "arguments": [],
+                "directives": [],
+                "loc": {
+                  "start": 201,
+                  "end": 213
+                }
+              },
+              {
+                "kind": "Field",
+                "name": {
+                  "kind": "Name",
+                  "value": "todayPerf",
+                  "loc": {
+                    "start": 218,
+                    "end": 227
+                  }
+                },
+                "arguments": [],
+                "directives": [],
+                "selectionSet": {
+                  "kind": "SelectionSet",
+                  "selections": [
+                    {
+                      "kind": "Field",
+                      "name": {
+                        "kind": "Name",
+                        "value": "id",
+                        "loc": {
+                          "start": 236,
+                          "end": 238
+                        }
+                      },
+                      "arguments": [],
+                      "directives": [],
+                      "loc": {
+                        "start": 236,
+                        "end": 238
+                      }
+                    },
+                    {
+                      "kind": "Field",
+                      "name": {
+                        "kind": "Name",
+                        "value": "perfCount",
+                        "loc": {
+                          "start": 245,
+                          "end": 254
+                        }
+                      },
+                      "arguments": [],
+                      "directives": [],
+                      "loc": {
+                        "start": 245,
+                        "end": 254
+                      }
+                    },
+                    {
+                      "kind": "Field",
+                      "name": {
+                        "kind": "Name",
+                        "value": "targetIsDone",
+                        "loc": {
+                          "start": 261,
+                          "end": 273
+                        }
+                      },
+                      "arguments": [],
+                      "directives": [],
+                      "loc": {
+                        "start": 261,
+                        "end": 273
+                      }
+                    },
+                    {
+                      "kind": "Field",
+                      "name": {
+                        "kind": "Name",
+                        "value": "__typename",
+                        "loc": {
+                          "start": 280,
+                          "end": 290
+                        }
+                      },
+                      "arguments": [],
+                      "directives": [],
+                      "loc": {
+                        "start": 280,
+                        "end": 290
+                      }
+                    }
+                  ],
+                  "loc": {
+                    "start": 228,
+                    "end": 296
+                  }
+                },
+                "loc": {
+                  "start": 218,
+                  "end": 296
+                }
+              },
+              {
+                "kind": "Field",
+                "name": {
+                  "kind": "Name",
+                  "value": "__typename",
+                  "loc": {
+                    "start": 301,
+                    "end": 311
+                  }
+                },
+                "arguments": [],
+                "directives": [],
+                "loc": {
+                  "start": 301,
+                  "end": 311
+                }
+              }
+            ],
+            "loc": {
+              "start": 140,
+              "end": 315
+            }
+          },
+          "loc": {
+            "start": 76,
+            "end": 315
+          }
+        }
+      ],
+      "loc": {
+        "start": 72,
+        "end": 317
+      }
+    },
+    "loc": {
+      "start": 0,
+      "end": 317
+    }
+  },
+  "variableValues": {
+    "competenceGoalInput": {
+      "name": "Programować",
+      "competence": "Informatyka",
+      "target": 1
+    }
+  },
+  "cacheControl": {
+    "cacheHint": {
+      "maxAge": 0
+    }
+  }
+}
+{
+  "competenceGoalInput": {
+    "name": "Programować",
+    "competence": "Informatyka",
+    "target": 1
+  }
+}
+^C
+(base) ]0;msz13@msz13-Aspire-A515-51G: /media/msz13/DATA/programowanie/grow-up[01;32mmsz13@msz13-Aspire-A515-51G[00m:[01;34m/media/msz13/DATA/programowanie/grow-up[00m$ npm start
+[37;40mnpm[0m [0m[30;43mWARN[0m [0m[35mlifecycle[0m The node binary used for scripts is /snap/bin/node but npm is using /snap/node/2252/bin/node itself. Use the `--scripts-prepend-node-path` option to include the path for the node binary npm was executed with.
+[0m
+> grow-up@1.0.0 prestart /media/msz13/DATA/programowanie/grow-up
+> tsc -p tsconfig.build.json
+
+
+> grow-up@1.0.0 start /media/msz13/DATA/programowanie/grow-up
+> node dist/main.js
+
+[32m[Nest] 6469   - [39m2019-06-23 11:13 PM   [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+[32m[Nest] 6469   - [39m2019-06-23 11:13 PM   [38;5;3m[InstanceLoader] [39m[32mApplicationModule dependencies initialized[39m[38;5;3m +55ms[39m
+[32m[Nest] 6469   - [39m2019-06-23 11:13 PM   [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +2ms[39m
+[32m[Nest] 6469   - [39m2019-06-23 11:13 PM   [38;5;3m[InstanceLoader] [39m[32mUserProfileModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 6469   - [39m2019-06-23 11:13 PM   [38;5;3m[InstanceLoader] [39m[32mJwtModule dependencies initialized[39m[38;5;3m +2ms[39m
+[32m[Nest] 6469   - [39m2019-06-23 11:13 PM   [38;5;3m[InstanceLoader] [39m[32mHelloModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 6469   - [39m2019-06-23 11:13 PM   [38;5;3m[InstanceLoader] [39m[32mAuthModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 6469   - [39m2019-06-23 11:13 PM   [38;5;3m[InstanceLoader] [39m[32mGraphQLModule dependencies initialized[39m[38;5;3m +2ms[39m
+[32m[Nest] 6469   - [39m2019-06-23 11:13 PM   [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +22ms[39m
+(node:6469) DeprecationWarning: current URL string parser is deprecated, and will be removed in a future version. To use the new parser, pass option { useNewUrlParser: true } to MongoClient.connect.
+[32m[Nest] 6469   - [39m2019-06-23 11:13 PM   [38;5;3m[InstanceLoader] [39m[32mTypeOrmCoreModule dependencies initialized[39m[38;5;3m +1687ms[39m
+[32m[Nest] 6469   - [39m2019-06-23 11:13 PM   [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 6469   - [39m2019-06-23 11:13 PM   [38;5;3m[InstanceLoader] [39m[32mCompetenceGoalModule dependencies initialized[39m[38;5;3m +2ms[39m
+[32m[Nest] 6469   - [39m2019-06-23 11:13 PM   [38;5;3m[RoutesResolver] [39m[32mHelloController {/}:[39m[38;5;3m +17ms[39m
+[32m[Nest] 6469   - [39m2019-06-23 11:13 PM   [38;5;3m[RouterExplorer] [39m[32mMapped {/, GET} route[39m[38;5;3m +14ms[39m
+[32m[Nest] 6469   - [39m2019-06-23 11:13 PM   [38;5;3m[RouterExplorer] [39m[32mMapped {/redirect, GET} route[39m[38;5;3m +7ms[39m
+[32m[Nest] 6469   - [39m2019-06-23 11:13 PM   [38;5;3m[RouterExplorer] [39m[32mMapped {/gettoken, POST} route[39m[38;5;3m +2ms[39m
+[32m[Nest] 6469   - [39m2019-06-23 11:13 PM   [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +210ms[39m
+"from decorator[object Object]"
+{
+  "name": "Codziennie programować",
+  "competence": "informatyka",
+  "target": 1,
+  "createdBy": "facebook|10217799873642215"
+}
+^C
+(base) ]0;msz13@msz13-Aspire-A515-51G: /media/msz13/DATA/programowanie/grow-up[01;32mmsz13@msz13-Aspire-A515-51G[00m:[01;34m/media/msz13/DATA/programowanie/grow-up[00m$ npm start
+[37;40mnpm[0m [0m[30;43mWARN[0m [0m[35mlifecycle[0m The node binary used for scripts is /snap/bin/node but npm is using /snap/node/2252/bin/node itself. Use the `--scripts-prepend-node-path` option to include the path for the node binary npm was executed with.
+[0m
+> grow-up@1.0.0 prestart /media/msz13/DATA/programowanie/grow-up
+> tsc -p tsconfig.build.json
+
+
+> grow-up@1.0.0 start /media/msz13/DATA/programowanie/grow-up
+> node dist/main.js
+
+[32m[Nest] 7144   - [39m2019-06-23 11:22 PM   [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+[32m[Nest] 7144   - [39m2019-06-23 11:22 PM   [38;5;3m[InstanceLoader] [39m[32mApplicationModule dependencies initialized[39m[38;5;3m +62ms[39m
+[32m[Nest] 7144   - [39m2019-06-23 11:22 PM   [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +2ms[39m
+[32m[Nest] 7144   - [39m2019-06-23 11:22 PM   [38;5;3m[InstanceLoader] [39m[32mUserProfileModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 7144   - [39m2019-06-23 11:22 PM   [38;5;3m[InstanceLoader] [39m[32mJwtModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 7144   - [39m2019-06-23 11:22 PM   [38;5;3m[InstanceLoader] [39m[32mHelloModule dependencies initialized[39m[38;5;3m +2ms[39m
+[32m[Nest] 7144   - [39m2019-06-23 11:22 PM   [38;5;3m[InstanceLoader] [39m[32mAuthModule dependencies initialized[39m[38;5;3m +2ms[39m
+[32m[Nest] 7144   - [39m2019-06-23 11:22 PM   [38;5;3m[InstanceLoader] [39m[32mGraphQLModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 7144   - [39m2019-06-23 11:22 PM   [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +42ms[39m
+(node:7144) DeprecationWarning: current URL string parser is deprecated, and will be removed in a future version. To use the new parser, pass option { useNewUrlParser: true } to MongoClient.connect.
+[32m[Nest] 7144   - [39m2019-06-23 11:22 PM   [38;5;3m[InstanceLoader] [39m[32mTypeOrmCoreModule dependencies initialized[39m[38;5;3m +1128ms[39m
+[32m[Nest] 7144   - [39m2019-06-23 11:22 PM   [38;5;3m[InstanceLoader] [39m[32mTypeOrmModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 7144   - [39m2019-06-23 11:22 PM   [38;5;3m[InstanceLoader] [39m[32mCompetenceGoalModule dependencies initialized[39m[38;5;3m +2ms[39m
+[32m[Nest] 7144   - [39m2019-06-23 11:22 PM   [38;5;3m[RoutesResolver] [39m[32mHelloController {/}:[39m[38;5;3m +19ms[39m
+[32m[Nest] 7144   - [39m2019-06-23 11:22 PM   [38;5;3m[RouterExplorer] [39m[32mM

@@ -4,14 +4,14 @@ import {ObjectID} from 'mongodb'
 import { GoalStatus } from "../models/competenceGoal.entity"
 import { ActiveCompetenceGoal } from "../models/active-competence-goal.entity";
 import { DateStr } from "../../common/types";
-import { CreateCompetenceGoalInput } from "../DTO/competence-goal-input";
+import { CreateCompetenceGoalInput, CreateCompetenceGoalInputByU } from "../DTO/competence-goal-input";
 import {GoalDayPerf} from '../models/competence-goal-perf.model'
 
 @EntityRepository(ActiveCompetenceGoal)
 export class CompetenceGoalRepository extends MongoRepository<ActiveCompetenceGoal> {
 
       
-   async  saveActive (competenceGoal: CreateCompetenceGoalInput,startActive:Date) {
+   async  saveActive (competenceGoal: CreateCompetenceGoalInputByU, startActive:Date) {
         
       const createdCompGoal = new ActiveCompetenceGoal(competenceGoal, startActive)
 

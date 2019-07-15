@@ -1,6 +1,4 @@
 import { ActiveCompetenceGoal } from './active-competence-goal.entity';
-import { isThisHour } from 'date-fns';
-import { GoalDayPerf } from './competence-goal-perf.model';
 import { GoalStatus } from './competenceGoal.entity';
 
 
@@ -28,7 +26,7 @@ describe('ActiveCompetenceGoal', () => {
       expect(compGoal.target).toBe(1);
       expect(compGoal.status).toBe(GoalStatus.ACTIVE)
       expect(compGoal.startActive).toBe(date)
-      expect(compGoal.goalPerfEffectivenes).toBe(0)
+     
 
       });
 
@@ -54,7 +52,6 @@ describe('ActiveCompetenceGoal', () => {
       const dayPerf = compGoal.goalDaysPerf[0]
       expect(dayPerf.perfCount).toBe(value)
       expect(dayPerf.targetIsDone).toBe(isOnTarget)
-      expect(compGoal.goalPerfEffectivenes).toBe(effectivenes)
     })
 
     it('dayCount', () => {
@@ -71,7 +68,7 @@ describe('ActiveCompetenceGoal', () => {
 
 
       it('create Day Performance List', () => {
-       const goalDaysPerf =  compGoal.createGoalDayPerfList("lastDay")
+       const goalDaysPerf =  compGoal.createGoalDayPerfList("lastDay", 8)
        const expected = {
          id: expect.any(Number),
          date: '2019-03-18',
@@ -85,7 +82,23 @@ describe('ActiveCompetenceGoal', () => {
         ;
         
         });
-   
 
+        it('Should  create goal performance history object', ()=> {
+         const  goalPerfHistory = compGoal.createPerfHistory('2019-03-20')
+
+         const expected = {
+           startActive: '2019-03-10',
+           endActive: '2019-03-20',
+           dayCount: 11,
+           daysOnTarget: 0
+
+         }
+         
+         expect(goalPerfHistory).toMatchObject(expected)
+
+         }
+
+        )
+ 
   
 });

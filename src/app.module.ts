@@ -9,7 +9,28 @@ import { ActiveCompetenceGoal } from './competence-goal/models/active-competence
 import {ConfigModule, ConfigService} from 'nestjs-config';
 import { HelloModule } from './hello/hello.module';
 import { AuthModule } from './auth/auth.module';
+import {verifyToken} from './common/authUtill'
 import * as path from 'path'
+import { JwtPayload } from './common/authUtill';
+import { AuthenticationError } from 'apollo-server-core';
+
+
+const auth =  async ({ req }) => {
+  
+ try {const  {sub: id} =  await verifyToken(req.headers.authorization) as JwtPayload
+
+  
+   return {
+    user: {id: id}
+   };
+  }
+
+catch (err) {
+  console.error(err)
+  throw new AuthenticationError('You have to be authenticated')
+}
+}
+
 
 
 @Module({
@@ -17,9 +38,10 @@ import * as path from 'path'
     GraphQLModule.forRoot({
 
       typePaths: ['./**/*.graphql'],
+      context: auth
 
-     // installSubscriptionHandlers: true,     
-            
+     // installSubscriptionHandlers: true,
+
     }),
     TypeOrmModule.forRootAsync({
       useFactory: (config: ConfigService) => config.get('database'),
