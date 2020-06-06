@@ -33,7 +33,7 @@
     "@nestjs/typeorm": "^6.0.0",
     "@types/mongodb": "^3.1.14",
     "apollo-server": "^2.2.3",
-    "apollo-server-express": "^2.4.8",
+    "apollo-server-express": "^2.14.2",
     "class-transformer": "^0.2.0",
     "class-validator": "^0.9.1",
     "date-fns": "^1.30.1",
